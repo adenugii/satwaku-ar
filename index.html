@@ -25,10 +25,10 @@
 <div id="landing-screen" class="screen-overlay">
   <!-- Dekorasi Balon/Bintang Mengambang -->
   <div class="floating-shapes">
-    <div class="float-item float-1">🦁</div>
-    <div class="float-item float-2">🐘</div>
+    <div class="float-item float-1">🐱</div>
+    <div class="float-item float-2">🐄</div>
     <div class="float-item float-3">⭐</div>
-    <div class="float-item float-4">🐬</div>
+    <div class="float-item float-4">🐘</div>
     <div class="float-item float-5">🌿</div>
   </div>
 
@@ -37,8 +37,15 @@
     <div class="landing-pill">🌟 Petualangan Edukasi AR Anak</div>
     <h1 class="landing-title">SatwaKu <span>AR</span></h1>
     <p class="landing-desc">
-      Ayo jelajahi dunia 12 hewan hebat! Arahkan kamera ke kartu ajaib dan saksikan hewan 3D muncul seketika!
+      Kenali 12 hewan dari 3 dunia: <b>Peliharaan</b>, <b>Ternak</b>, dan <b>Liar</b>! Arahkan kamera ke kartu ajaib dan saksikan hewan 3D muncul seketika!
     </p>
+
+    <!-- Kategori Mini Preview -->
+    <div class="category-overview-pills">
+      <div class="cat-pill pill-pet">🐱 Peliharaan (3)</div>
+      <div class="cat-pill pill-farm">🐄 Ternak (4)</div>
+      <div class="cat-pill pill-wild">🦁 Liar (5)</div>
+    </div>
 
     <!-- Langkah Bermain -->
     <div class="steps-container">
@@ -52,7 +59,7 @@
       </div>
       <div class="step-item">
         <div class="step-badge">3</div>
-        <div class="step-text">Putar hewan 3D & dengar suara asyiknya!</div>
+        <div class="step-text">Putar hewan 3D & dengar dongeng suaranya!</div>
       </div>
     </div>
 
@@ -94,11 +101,20 @@
   <header id="ar-header">
     <div class="ar-logo-badge">
       <span class="ar-logo-icon">🐾</span>
-      <span>SatwaKu AR Studio</span>
+      <span>SatwaKu AR</span>
     </div>
+    
+    <!-- Filter Kategori Cepat -->
+    <div class="header-category-tabs">
+      <button class="category-tab-btn active" data-category="all" onclick="filterDockCategory('all')">Semua (12)</button>
+      <button class="category-tab-btn" data-category="peliharaan" onclick="filterDockCategory('peliharaan')">🐱 Peliharaan</button>
+      <button class="category-tab-btn" data-category="ternak" onclick="filterDockCategory('ternak')">🐄 Ternak</button>
+      <button class="category-tab-btn" data-category="liar" onclick="filterDockCategory('liar')">🦁 Liar</button>
+    </div>
+
     <div class="ar-stats-chip">
-      <span>⭐ Jelajah Koleksi:</span>
-      <b id="ar-discovered-count">12 Satwa</b>
+      <span>⭐ Ditemukan:</span>
+      <b id="ar-discovered-count">0 / 12 Satwa</b>
     </div>
     <button class="btn btn-close" onclick="soundMgr.playPop(); endSession();">
       ✕ Selesai
@@ -117,7 +133,7 @@
           <span>🎮</span>
           <span>Studio 3D Hewan</span>
         </div>
-        <span id="studio-animal-badge" class="category-badge">Preview 3D</span>
+        <span id="studio-animal-badge" class="category-badge">Hewan Peliharaan</span>
       </div>
 
       <!-- Canvas Interaktif Three.js -->
@@ -160,56 +176,62 @@
       <!-- Header Info Satwa -->
       <div class="info-header">
         <div class="info-title-group">
-          <div class="animal-avatar" id="info-avatar">🐘</div>
+          <div class="animal-avatar" id="info-avatar">🐱</div>
           <div class="animal-names">
-            <h2 id="info-animal-name">Gajah</h2>
-            <div id="info-animal-nickname">Gani si Raksasa Lembut</div>
-            <div id="info-animal-latin">Elephas maximus</div>
+            <h2 id="info-animal-name">Kucing</h2>
+            <div id="info-animal-nickname">Mimi si Manis Berbulu</div>
+            <div id="info-animal-latin">Felis catus</div>
           </div>
         </div>
       </div>
 
       <!-- Isi Informasi Lengkap Satwa -->
       <div class="info-content">
-        <span id="info-badge-status" class="category-badge">Mamalia Darat Terbesar</span>
+        <span id="info-badge-status" class="category-badge">Sahabat Rumahan</span>
 
         <!-- Fakta Habitat & Wilayah -->
         <div class="fact-tile">
           <div class="tile-label">🏕️ Rumah & Habitat</div>
-          <div class="tile-val" id="info-habitat">Hutan lebat, tepi sungai & padang rumput</div>
+          <div class="tile-val" id="info-habitat">Lingkungan rumah & pemukiman manusia</div>
         </div>
 
         <!-- Fakta Makanan -->
         <div class="fact-tile">
           <div class="tile-label">🍽️ Makanan Favorit</div>
-          <div class="tile-val" id="info-food">🌿 Rumput segar, dedaunan, & buah-buahan</div>
+          <div class="tile-val" id="info-food">🐟 Ikan segar & daging</div>
         </div>
 
-        <!-- Ukuran Tubuh Menakjubkan -->
+        <!-- Ukuran Tubuh -->
         <div class="fact-tile">
-          <div class="tile-label">📏 Ukuran Super</div>
-          <div class="tile-val" id="info-size">Tinggi 3 meter, berat mencapai 5 ton</div>
+          <div class="tile-label">📏 Ukuran Tubuh</div>
+          <div class="tile-val" id="info-size">Panjang 45-50 cm, berat 3-5 kg</div>
+        </div>
+
+        <!-- Status Konservasi / Perlindungan -->
+        <div class="fact-tile">
+          <div class="tile-label">🛡️ Status Keberadaan</div>
+          <div class="tile-val" id="info-conservation-status">Hewan Peliharaan Aman</div>
         </div>
 
         <!-- Kekuatan Super Satwa -->
         <div class="superpower-card">
-          <div class="superpower-title">✨ Kekuatan Super Satwa!</div>
+          <div class="superpower-title">✨ Keunikan & Kekuatan Super!</div>
           <div class="superpower-desc" id="info-superpower">
-            Belalainya memiliki lebih dari 40.000 otot kuat!
+            Kumis kucing sangat sensitif, bisa mendeteksi celah sempit di tempat gelap!
           </div>
         </div>
 
         <!-- Trivia Unik -->
         <div class="fact-tile" style="background:#FEF9C3; border-color:#FDE047;">
-          <div class="tile-label" style="color:#854D0E;">💡 Tahukah Kamu?</div>
+          <div class="tile-label" style="color:#854D0E;">💡 Fakta Seru!</div>
           <div class="tile-val" id="info-trivia">
-            Gajah bisa mengingat jalur air selama puluhan tahun!
+            Kucing bisa mendengkur saat merasa bahagia dan tenang!
           </div>
         </div>
 
         <!-- Tombol Cerita Suara Ramah Anak (TTS) -->
         <button id="btn-audio-narration" class="btn btn-narration" onclick="toggleAudioNarration()">
-          <span>📢 Ceritakan Kisah Hewan Ini!</span>
+          <span>📢 Putar Penjelasan Suara</span>
         </button>
       </div>
     </section>
@@ -220,7 +242,7 @@
        BARIS BAWAH: RAK KARTU DOCK (Bisa Diklik Langsung)
        ────────────────────────────────────────────────────────── -->
   <footer id="ar-dock-footer">
-    <div class="dock-label">🐾 Pilih Satwa:</div>
+    <div class="dock-label">🐾 Pilih Hewan:</div>
     <div class="dock-scroll-row" id="dock-animal-list">
       <!-- Item kartu hewan akan di-generate otomatis via JS -->
     </div>
@@ -234,86 +256,101 @@
 <div id="marker-modal" class="modal-overlay hidden">
   <div class="modal-content">
     <div class="modal-header">
-      <h3 class="modal-title">🎴 Kartu Marker Hewan SatwaKu</h3>
+      <h3 class="modal-title">🎴 Kartu Marker SatwaKu (12 Hewan)</h3>
       <button class="btn btn-close" onclick="soundMgr.playPop(); closeMarkerCardsModal();">✕</button>
     </div>
     <div class="modal-body">
       <p style="font-size:0.9rem; color:#475569;">
-        Tampilkan kartu ini di layar ponsel lain atau cetak untuk diarahkan ke kamera AR:
+        Arahkan kamera ke kartu barcode berikut untuk memunculkan hewan 3D:
       </p>
       <div style="margin: 12px 0;">
         <a href="cards.html" target="_blank" class="btn btn-primary" style="font-size:0.9rem; text-decoration:none;">
           🖨️ Buka Kartu Siap Cetak (A4)
         </a>
       </div>
+      
+      <!-- Sub-heading Peliharaan -->
+      <h4 style="margin: 14px 0 6px; color:#D97706;">🐱 Kategori A: Hewan Peliharaan</h4>
       <div class="modal-cards-grid">
         <div class="marker-thumb-card">
-          <b>1. Gajah</b>
+          <b>1. Kucing</b>
           <img class="marker-thumb-img" src="assets/markers/hamming/0.png" alt="Marker 0" />
           <span>Barcode ID: 0</span>
         </div>
         <div class="marker-thumb-card">
-          <b>2. Badak</b>
+          <b>2. Anjing</b>
           <img class="marker-thumb-img" src="assets/markers/hamming/1.png" alt="Marker 1" />
           <span>Barcode ID: 1</span>
         </div>
         <div class="marker-thumb-card">
-          <b>3. Singa</b>
+          <b>3. Kelinci</b>
           <img class="marker-thumb-img" src="assets/markers/hamming/2.png" alt="Marker 2" />
           <span>Barcode ID: 2</span>
         </div>
+      </div>
+
+      <!-- Sub-heading Ternak -->
+      <h4 style="margin: 18px 0 6px; color:#059669;">🐄 Kategori B: Hewan Ternak</h4>
+      <div class="modal-cards-grid">
         <div class="marker-thumb-card">
-          <b>4. Macan</b>
+          <b>4. Sapi</b>
           <img class="marker-thumb-img" src="assets/markers/hamming/3.png" alt="Marker 3" />
           <span>Barcode ID: 3</span>
         </div>
         <div class="marker-thumb-card">
-          <b>5. Zebra</b>
+          <b>5. Ayam</b>
           <img class="marker-thumb-img" src="assets/markers/hamming/4.png" alt="Marker 4" />
           <span>Barcode ID: 4</span>
         </div>
         <div class="marker-thumb-card">
-          <b>6. Kapibara</b>
+          <b>6. Kambing</b>
           <img class="marker-thumb-img" src="assets/markers/hamming/5.png" alt="Marker 5" />
           <span>Barcode ID: 5</span>
         </div>
         <div class="marker-thumb-card">
-          <b>7. Kura-kura</b>
+          <b>7. Bebek</b>
           <img class="marker-thumb-img" src="assets/markers/3x3/6.png" alt="Marker 6" />
           <span>Barcode ID: 6</span>
         </div>
+      </div>
+
+      <!-- Sub-heading Liar -->
+      <h4 style="margin: 18px 0 6px; color:#DC2626;">🦁 Kategori C: Hewan Liar</h4>
+      <div class="modal-cards-grid">
         <div class="marker-thumb-card">
-          <b>8. Kadal</b>
+          <b>8. Gajah</b>
           <img class="marker-thumb-img" src="assets/markers/3x3/7.png" alt="Marker 7" />
           <span>Barcode ID: 7</span>
         </div>
         <div class="marker-thumb-card">
-          <b>9. Ular</b>
+          <b>9. Singa</b>
           <img class="marker-thumb-img" src="assets/markers/3x3/8.png" alt="Marker 8" />
           <span>Barcode ID: 8</span>
         </div>
         <div class="marker-thumb-card">
-          <b>10. Burung</b>
+          <b>10. Jerapah</b>
           <img class="marker-thumb-img" src="assets/markers/3x3/9.png" alt="Marker 9" />
           <span>Barcode ID: 9</span>
         </div>
         <div class="marker-thumb-card">
-          <b>11. Ikan</b>
+          <b>11. Harimau</b>
           <img class="marker-thumb-img" src="assets/markers/3x3/10.png" alt="Marker 10" />
           <span>Barcode ID: 10</span>
         </div>
         <div class="marker-thumb-card">
-          <b>12. Lumba-lumba</b>
+          <b>12. Monyet</b>
           <img class="marker-thumb-img" src="assets/markers/3x3/11.png" alt="Marker 11" />
           <span>Barcode ID: 11</span>
         </div>
       </div>
+
     </div>
   </div>
 </div>
 
 <!-- ============================================================
      TEMPLATE AR SCENE (Diinjeksi saat kamera dimulai)
+     12 Hewan: Kucing, Anjing, Kelinci, Sapi, Ayam, Kambing, Bebek, Gajah, Singa, Jerapah, Harimau, Monyet
      ============================================================ -->
 <template id="ar-scene-template">
   <a-scene
@@ -327,61 +364,78 @@
     <a-entity light="type: directional; color: #e0f2fe; intensity: 0.8; position: -3 3 -1"></a-entity>
 
     <a-assets timeout="10000">
+      <!-- Kategori A: Peliharaan (0-2) -->
+      <a-asset-item id="model-kucing"   src="assets/models/poly/Cat.glb"></a-asset-item>
+      <a-asset-item id="model-anjing"   src="assets/models/poly/Dog.glb"></a-asset-item>
+      <a-asset-item id="model-kelinci"  src="assets/models/poly/Rabbit.glb"></a-asset-item>
+      
+      <!-- Kategori B: Ternak (3-6) -->
+      <a-asset-item id="model-sapi"     src="assets/models/poly/Cow.glb"></a-asset-item>
+      <a-asset-item id="model-ayam"     src="assets/models/poly/Chicken.glb"></a-asset-item>
+      <a-asset-item id="model-kambing"  src="assets/models/poly/Goat.glb"></a-asset-item>
+      <a-asset-item id="model-bebek"    src="assets/models/poly/Duck.glb"></a-asset-item>
+      
+      <!-- Kategori C: Liar (7-11) -->
       <a-asset-item id="model-gajah"    src="assets/models/poly/Elephant.glb"></a-asset-item>
-      <a-asset-item id="model-badak"    src="assets/models/poly/Rhino.glb"></a-asset-item>
       <a-asset-item id="model-singa"    src="assets/models/poly/Lion.glb"></a-asset-item>
-      <a-asset-item id="model-macan"    src="assets/models/poly/Tiger.glb"></a-asset-item>
-      <a-asset-item id="model-zebra"    src="assets/models/poly/Zebra.glb"></a-asset-item>
-      <a-asset-item id="model-kapibara" src="assets/models/poly/Capybara.glb"></a-asset-item>
-      <a-asset-item id="model-kura"     src="assets/models/poly/Turtle.glb"></a-asset-item>
-      <a-asset-item id="model-kadal"    src="assets/models/poly/Lizard.glb"></a-asset-item>
-      <a-asset-item id="model-ular"     src="assets/models/poly/Snake.glb"></a-asset-item>
-      <a-asset-item id="model-burung"   src="assets/models/poly/Bird.glb"></a-asset-item>
-      <a-asset-item id="model-ikan"     src="assets/models/poly/Fish.glb"></a-asset-item>
-      <a-asset-item id="model-lumba"    src="assets/models/poly/Dolphin.glb"></a-asset-item>
+      <a-asset-item id="model-jerapah"  src="assets/models/poly/Giraffe.glb"></a-asset-item>
+      <a-asset-item id="model-harimau"  src="assets/models/poly/Tiger.glb"></a-asset-item>
+      <a-asset-item id="model-monyet"   src="assets/models/poly/monkey.glb"></a-asset-item>
     </a-assets>
 
     <!-- Markers Barcode (0–11) -->
+    <!-- 0: Kucing -->
     <a-marker type="barcode" value="0"  id="marker-0"  data-satwa-id="animal_01" smooth="true" smoothCount="5">
-      <a-entity gltf-model="#model-gajah"    position="0 0 0" scale="0.20 0.20 0.20" animation="property:rotation;to:0 360 0;loop:true;dur:18000;easing:linear"></a-entity>
+      <a-entity gltf-model="#model-kucing"  position="0 0 0" scale="0.15 0.15 0.15" animation="property:rotation;to:0 360 0;loop:true;dur:18000;easing:linear"></a-entity>
     </a-marker>
+    <!-- 1: Anjing -->
     <a-marker type="barcode" value="1"  id="marker-1"  data-satwa-id="animal_02" smooth="true" smoothCount="5">
-      <a-entity gltf-model="#model-badak"    position="0 0 0" scale="0.18 0.18 0.18" animation="property:rotation;to:0 360 0;loop:true;dur:18000;easing:linear"></a-entity>
+      <a-entity gltf-model="#model-anjing"  position="0 0 0" scale="0.18 0.18 0.18" animation="property:rotation;to:0 360 0;loop:true;dur:18000;easing:linear"></a-entity>
     </a-marker>
+    <!-- 2: Kelinci -->
     <a-marker type="barcode" value="2"  id="marker-2"  data-satwa-id="animal_03" smooth="true" smoothCount="5">
-      <a-entity gltf-model="#model-singa"    position="0 0 0" scale="0.18 0.18 0.18" animation="property:rotation;to:0 360 0;loop:true;dur:18000;easing:linear"></a-entity>
+      <a-entity gltf-model="#model-kelinci" position="0 0 0" scale="0.15 0.15 0.15" animation="property:rotation;to:0 360 0;loop:true;dur:18000;easing:linear"></a-entity>
     </a-marker>
+    <!-- 3: Sapi -->
     <a-marker type="barcode" value="3"  id="marker-3"  data-satwa-id="animal_04" smooth="true" smoothCount="5">
-      <a-entity gltf-model="#model-macan"    position="0 0 0" scale="0.15 0.15 0.15" animation="property:rotation;to:0 360 0;loop:true;dur:18000;easing:linear"></a-entity>
+      <a-entity gltf-model="#model-sapi"    position="0 0 0" scale="0.18 0.18 0.18" animation="property:rotation;to:0 360 0;loop:true;dur:18000;easing:linear"></a-entity>
     </a-marker>
+    <!-- 4: Ayam -->
     <a-marker type="barcode" value="4"  id="marker-4"  data-satwa-id="animal_05" smooth="true" smoothCount="5">
-      <a-entity gltf-model="#model-zebra"    position="0 0 0" scale="0.18 0.18 0.18" animation="property:rotation;to:0 360 0;loop:true;dur:18000;easing:linear"></a-entity>
+      <a-entity gltf-model="#model-ayam"    position="0 0 0" scale="0.15 0.15 0.15" animation="property:rotation;to:0 360 0;loop:true;dur:18000;easing:linear"></a-entity>
     </a-marker>
+    <!-- 5: Kambing -->
     <a-marker type="barcode" value="5"  id="marker-5"  data-satwa-id="animal_06" smooth="true" smoothCount="5">
-      <a-entity gltf-model="#model-kapibara" position="0 0 0" scale="0.15 0.15 0.15" animation="property:rotation;to:0 360 0;loop:true;dur:18000;easing:linear"></a-entity>
+      <a-entity gltf-model="#model-kambing" position="0 0 0" scale="0.18 0.18 0.18" animation="property:rotation;to:0 360 0;loop:true;dur:18000;easing:linear"></a-entity>
     </a-marker>
+    <!-- 6: Bebek -->
     <a-marker type="barcode" value="6"  id="marker-6"  data-satwa-id="animal_07" smooth="true" smoothCount="5">
-      <a-entity gltf-model="#model-kura"     position="0 0 0" scale="0.12 0.12 0.12" animation="property:rotation;to:0 360 0;loop:true;dur:18000;easing:linear"></a-entity>
+      <a-entity gltf-model="#model-bebek"   position="0 0 0" scale="0.15 0.15 0.15" animation="property:rotation;to:0 360 0;loop:true;dur:18000;easing:linear"></a-entity>
     </a-marker>
+    <!-- 7: Gajah -->
     <a-marker type="barcode" value="7"  id="marker-7"  data-satwa-id="animal_08" smooth="true" smoothCount="5">
-      <a-entity gltf-model="#model-kadal"    position="0 0 0" scale="0.15 0.15 0.15" animation="property:rotation;to:0 360 0;loop:true;dur:18000;easing:linear"></a-entity>
+      <a-entity gltf-model="#model-gajah"   position="0 0 0" scale="0.20 0.20 0.20" animation="property:rotation;to:0 360 0;loop:true;dur:18000;easing:linear"></a-entity>
     </a-marker>
+    <!-- 8: Singa -->
     <a-marker type="barcode" value="8"  id="marker-8"  data-satwa-id="animal_09" smooth="true" smoothCount="5">
-      <a-entity gltf-model="#model-ular"     position="0 0 0" scale="0.12 0.12 0.12" animation="property:rotation;to:0 360 0;loop:true;dur:18000;easing:linear"></a-entity>
+      <a-entity gltf-model="#model-singa"   position="0 0 0" scale="0.18 0.18 0.18" animation="property:rotation;to:0 360 0;loop:true;dur:18000;easing:linear"></a-entity>
     </a-marker>
+    <!-- 9: Jerapah -->
     <a-marker type="barcode" value="9"  id="marker-9"  data-satwa-id="animal_10" smooth="true" smoothCount="5">
-      <a-entity gltf-model="#model-burung"   position="0 0 0" scale="0.20 0.20 0.20" animation="property:rotation;to:0 360 0;loop:true;dur:18000;easing:linear"></a-entity>
+      <a-entity gltf-model="#model-jerapah" position="0 0 0" scale="0.18 0.18 0.18" animation="property:rotation;to:0 360 0;loop:true;dur:18000;easing:linear"></a-entity>
     </a-marker>
+    <!-- 10: Harimau -->
     <a-marker type="barcode" value="10" id="marker-10" data-satwa-id="animal_11" smooth="true" smoothCount="5">
-      <a-entity gltf-model="#model-ikan"     position="0 0 0" scale="0.10 0.10 0.10" animation="property:rotation;to:0 360 0;loop:true;dur:18000;easing:linear"></a-entity>
+      <a-entity gltf-model="#model-harimau" position="0 0 0" scale="0.15 0.15 0.15" animation="property:rotation;to:0 360 0;loop:true;dur:18000;easing:linear"></a-entity>
     </a-marker>
+    <!-- 11: Monyet -->
     <a-marker type="barcode" value="11" id="marker-11" data-satwa-id="animal_12" smooth="true" smoothCount="5">
-      <a-entity gltf-model="#model-lumba"    position="0 0 0" scale="0.10 0.10 0.10" animation="property:rotation;to:0 360 0;loop:true;dur:18000;easing:linear"></a-entity>
+      <a-entity gltf-model="#model-monyet"  position="0 0 0" scale="0.14 0.14 0.14" animation="property:rotation;to:0 360 0;loop:true;dur:18000;easing:linear"></a-entity>
     </a-marker>
 
     <!-- Marker Hiro Fallback -->
     <a-marker preset="hiro" id="marker-hiro" data-satwa-id="animal_01" smooth="true">
-      <a-entity gltf-model="#model-gajah" position="0 0 0" scale="0.20 0.20 0.20" animation="property:rotation;to:0 360 0;loop:true;dur:18000;easing:linear"></a-entity>
+      <a-entity gltf-model="#model-kucing" position="0 0 0" scale="0.15 0.15 0.15" animation="property:rotation;to:0 360 0;loop:true;dur:18000;easing:linear"></a-entity>
     </a-marker>
 
     <a-entity camera></a-entity>
