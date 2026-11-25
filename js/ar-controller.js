@@ -39,11 +39,40 @@ const ARState = {
   previewInteract: null
 };
 
-// ── Inisialisasi DOM ───────────────────────────────────────────────────────
+// ── Switch Tab View Khusus Tampilan Layar Mobile ──────────────────────────
+function switchMobileView(viewName) {
+  soundMgr.playPop();
+  
+  // Set class di body dan di ar-workspace
+  document.body.classList.remove("mobile-view-camera", "mobile-view-studio", "mobile-view-info");
+  document.body.classList.add(`mobile-view-${viewName}`);
+
+  const workspace = document.getElementById("ar-workspace");
+  if (workspace) {
+    workspace.classList.remove("view-camera", "view-studio", "view-info");
+    workspace.classList.add(`view-${viewName}`);
+  }
+
+  document.querySelectorAll(".mobile-tab-btn").forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.view === viewName);
+  });
+
+  // Jika masuk ke tab studio 3D, trigger resize Three.js agar canvas menyesuaikan dimensi baru
+  if (viewName === "studio" && ARState.previewRenderer) {
+    setTimeout(() => {
+      window.dispatchEvent(new Event("resize"));
+    }, 100);
+  }
+}
+
+// Inisialisasi default view mobile & bangun dock satwa saat DOM siap
 document.addEventListener("DOMContentLoaded", () => {
   setupVideoObserver();
   buildDockAnimalList();
   selectAnimal("animal_01", false);
+  document.body.classList.add("mobile-view-camera");
+  const ws = document.getElementById("ar-workspace");
+  if (ws) ws.classList.add("view-camera");
 });
 
 // ── Bangun Dock Navigasi Satwa Berdasarkan Kategori ────────────────────────
@@ -219,13 +248,30 @@ async function startAR() {
       throw new Error("getUserMedia tidak didukung browser ini.");
     }
 
-    const testStream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: { ideal: "environment" } },
-      audio: false
-    });
-    testStream.getTracks().forEach(t => t.stop());
+    // Uji izin kamera (dengan fallback jika environment/back camera tidak ada di laptop)
+    let testStream = null;
+    try {
+      testStream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: { ideal: "environment" } },
+        audio: false
+      });
+    } catch (envErr) {
+      // Fallback ke kamera default laptop jika ideal environment ditolak/tidak ditemukan
+      testStream = await navigator.mediaDevices.getUserMedia({
+        video: true,
+        audio: false
+      });
+    }
+
+    if (testStream) {
+      testStream.getTracks().forEach(t => t.stop());
+    }
 
     document.getElementById("ar-screen").classList.remove("hidden");
+
+    // Pastikan dock satwa terisi & ter-render saat masuk ke layar AR
+    buildDockAnimalList();
+    selectAnimal(ARState.activeAnimalId || "animal_01", false);
 
     const container = document.getElementById("ar-scene-container");
     const template = document.getElementById("ar-scene-template");

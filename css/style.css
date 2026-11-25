@@ -657,26 +657,158 @@ video, #col-camera-ar video, video#arjs-video {
 /* ==========================================================================
    RESPONSIF MOBILE (< 900px)
    ========================================================================== */
+.mobile-tabs-bar {
+  display: none;
+}
+
 @media (max-width: 900px) {
-  #ar-workspace {
-    grid-template-columns: 1fr;
-    grid-template-rows: 240px 1fr; /* Kamera atas, Info & Preview bawah bertab */
-    overflow-y: auto;
+  /* Header di Mobile: Sangat Kompak & Pas */
+  #ar-header {
+    height: 48px;
+    padding: 0 8px;
+    gap: 6px;
+  }
+  .ar-logo-badge {
+    font-size: 0.85rem;
+    gap: 4px;
+    white-space: nowrap;
+  }
+  .ar-logo-icon {
+    font-size: 1.15rem;
+  }
+  .ar-stats-chip {
+    padding: 3px 8px;
+    font-size: 0.68rem;
+    gap: 4px;
+    white-space: nowrap;
+  }
+  .ar-stats-chip span {
+    display: none; /* Sembunyikan kata "Ditemukan:" di layar kecil agar tidak menumpuk */
+  }
+  .btn-close {
+    padding: 5px 10px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    border-radius: var(--radius-pill);
+  }
+
+  /* Segmented Bar Tabs di bawah Header */
+  .mobile-tabs-bar {
+    display: flex;
+    background: #FFFFFF;
+    border-bottom: 2px solid #E2E8F0;
+    padding: 6px 10px;
     gap: 8px;
+    z-index: 28;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+  }
+  .mobile-tab-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px 6px;
+    background: #F1F5F9;
+    border: 2px solid transparent;
+    border-radius: var(--radius-pill);
+    font-size: 0.82rem;
+    font-weight: 800;
+    color: #475569;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .mobile-tab-btn.active {
+    background: #EFF6FF;
+    border-color: #3B82F6;
+    color: #1D4ED8;
+    box-shadow: 0 2px 6px rgba(59, 130, 246, 0.25);
+  }
+
+  /* Workspace di Mobile: Layout Rapi Sesuai Tab Terpilih */
+  #ar-workspace {
+    display: flex;
+    flex-direction: column;
     padding: 8px;
+    gap: 8px;
+    flex: 1;
+    overflow: hidden;
+    position: relative;
   }
-  #col-camera-ar {
-    height: 240px;
+
+  /* Mode Mobile Tampilan Tab:
+     Setiap tab berdiri sendiri 100% sehingga bersih dan tidak ada yang menumpuk.
+  */
+  
+  /* 1. Mode Camera: Tampilkan Kamera AR 100% tinggi workspace */
+  body.mobile-view-camera #col-preview-studio,
+  body.mobile-view-camera #col-info-details,
+  #ar-workspace.view-camera #col-preview-studio,
+  #ar-workspace.view-camera #col-info-details {
+    display: none !important;
+  }
+  body.mobile-view-camera #col-camera-ar,
+  #ar-workspace.view-camera #col-camera-ar {
+    display: flex !important;
+    flex: 1 !important;
+    height: 100% !important;
+    width: 100% !important;
     border-radius: var(--radius-lg);
+    border: 2px solid #CBD5E1;
   }
-  #col-preview-studio {
-    height: 220px;
+
+  /* 2. Mode Studio: Tampilkan Studio 3D 100% */
+  body.mobile-view-studio #col-camera-ar,
+  body.mobile-view-studio #col-info-details,
+  #ar-workspace.view-studio #col-camera-ar,
+  #ar-workspace.view-studio #col-info-details {
+    display: none !important;
+  }
+  body.mobile-view-studio #col-preview-studio,
+  #ar-workspace.view-studio #col-preview-studio {
+    display: flex !important;
+    flex: 1 !important;
+    height: 100% !important;
+    width: 100% !important;
     border-radius: var(--radius-lg);
+    border: 2px solid #E2E8F0;
   }
-  #col-info-details {
+
+  /* 3. Mode Info: Tampilkan Info Satwa 100% dengan scroll mulus */
+  body.mobile-view-info #col-camera-ar,
+  body.mobile-view-info #col-preview-studio,
+  #ar-workspace.view-info #col-camera-ar,
+  #ar-workspace.view-info #col-preview-studio {
+    display: none !important;
+  }
+  body.mobile-view-info #col-info-details,
+  #ar-workspace.view-info #col-info-details {
+    display: flex !important;
+    flex: 1 !important;
+    height: 100% !important;
+    width: 100% !important;
     border-radius: var(--radius-lg);
+    border: 2px solid #E2E8F0;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
   }
+
+  /* Dock Bawah */
   #ar-dock-footer {
-    height: 72px;
+    height: 68px;
+    padding: 0 10px;
+    gap: 8px;
+  }
+  .dock-label {
+    font-size: 0.72rem;
+  }
+  .dock-animal-card {
+    padding: 5px 10px;
+  }
+  .dock-emoji {
+    font-size: 1.25rem;
+  }
+  .dock-name {
+    font-size: 0.75rem;
   }
 }
