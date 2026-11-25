@@ -1,38 +1,40 @@
 /* ==========================================================================
-   SatwaKu AR – Tema Kebun Binatang (Zoo Theme)
-   Ramah anak usia 6–12 tahun | High-contrast | Responsif mobile & desktop
+   SatwaKu AR – Tema Petualangan Ceria Anak (Kids Adventure Theme)
+   Cerah, Playful, Ramah Sentuhan, Kontras Tinggi & 3-Kolom AR Studio
    ========================================================================== */
 
-/* ── Variabel Warna ───────────────────────────────────────────────────────── */
+/* ── Variabel Warna Ceria & Dimensi ───────────────────────────────────────── */
 :root {
-  --zoo-dark:        #0a2e1a;
-  --zoo-deep:        #0d3b22;
-  --zoo-green:       #15803d;
-  --zoo-mid:         #16a34a;
-  --zoo-light:       #22c55e;
-  --zoo-mint:        #6ee7b7;
-  --zoo-pale:        #d1fae5;
-  --zoo-yellow:      #fbbf24;
-  --zoo-orange:      #f97316;
-  --zoo-brown:       #92400e;
-  --zoo-sky:         #bae6fd;
-  --zoo-red:         #ef4444;
-  --text-on-dark:    #ffffff;
-  --text-soft:       #d1fae5;
-  --glass-dark:      rgba(10, 46, 26, 0.92);
-  --glass-mid:       rgba(13, 59, 34, 0.88);
-  --shadow-green:    0 8px 32px rgba(21,128,61,0.35);
-  --shadow-card:     0 4px 24px rgba(0,0,0,0.4);
-  --radius-xl:       24px;
-  --radius-lg:       16px;
-  --radius-md:       12px;
+  --primary-yellow:    #FFB800;
+  --primary-hover:     #FFA000;
+  --primary-sky:       #0EA5E9;
+  --primary-coral:     #FF6B6B;
+  --primary-green:     #10B981;
+  --primary-violet:    #8B5CF6;
+
+  --bg-gradient:       linear-gradient(135deg, #E0F2FE 0%, #FEF3C7 50%, #DCFCE7 100%);
+  --bg-card:           #FFFFFF;
+  --bg-card-glass:     rgba(255, 255, 255, 0.88);
+  --text-main:         #1E293B;
+  --text-muted:        #64748B;
+  --text-bright:       #0F172A;
+
+  --shadow-button:     0 6px 0px rgba(0, 0, 0, 0.15);
+  --shadow-button-act: 0 2px 0px rgba(0, 0, 0, 0.2);
+  --shadow-card:       0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+  --shadow-pop:        0 14px 28px rgba(0,0,0,0.12);
+
+  --radius-xl:         28px;
+  --radius-lg:         20px;
+  --radius-md:         14px;
+  --radius-pill:       9999px;
 }
 
-/* ── Reset & Base ─────────────────────────────────────────────────────────── */
+/* ── Reset & Dasar ───────────────────────────────────────────────────────── */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0; padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  font-family: 'Comic Sans MS', 'Fredoka', 'Quicksand', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -40,530 +42,613 @@ html, body {
   width: 100%; height: 100%;
   overflow: hidden;
   position: fixed;
-  background: var(--zoo-dark);
-  color: var(--text-on-dark);
+  background: var(--bg-gradient);
+  color: var(--text-main);
+  user-select: none;
 }
 
 .hidden { display: none !important; }
 
-/* ── Scrollbar tersembunyi tapi bisa scroll ───────────────────────────────── */
-.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-.no-scrollbar::-webkit-scrollbar { display: none; }
+/* ── Tombol Bergaya Arcade 3D Ramah Anak ─────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px 22px;
+  border-radius: var(--radius-lg);
+  font-size: 1rem;
+  font-weight: 800;
+  cursor: pointer;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  transition: all 0.12s cubic-bezier(0.4, 0, 0.2, 1);
+  text-decoration: none;
+  outline: none;
+}
+
+.btn:active {
+  transform: translateY(3px);
+}
+
+.btn-primary {
+  background: linear-gradient(180deg, #FFD166 0%, #FFB800 100%);
+  color: #78350F;
+  box-shadow: 0 5px 0 #D97706, 0 10px 20px rgba(217, 119, 6, 0.3);
+}
+.btn-primary:active {
+  box-shadow: 0 2px 0 #D97706;
+}
+
+.btn-secondary {
+  background: linear-gradient(180deg, #FFFFFF 0%, #F1F5F9 100%);
+  color: #334155;
+  box-shadow: 0 4px 0 #CBD5E1;
+  border: 2px solid #E2E8F0;
+}
+.btn-secondary:active {
+  box-shadow: 0 1px 0 #CBD5E1;
+}
+
+.btn-close {
+  background: #FEE2E2;
+  color: #EF4444;
+  border: 2px solid #FECACA;
+  padding: 8px 16px;
+  border-radius: var(--radius-pill);
+  font-size: 0.85rem;
+  font-weight: 800;
+  box-shadow: 0 3px 0 #FCA5A5;
+}
+.btn-close:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 #FCA5A5;
+}
 
 /* ==========================================================================
-   LANDING SCREEN
+   LANDING SCREEN (Penuh Warna & Karakter)
    ========================================================================== */
 .screen-overlay {
   position: fixed; inset: 0; z-index: 100;
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
   overflow-y: auto;
-  /* Background gradasi hutan tropis */
-  background:
-    radial-gradient(ellipse 80% 50% at 50% 0%,   #1a5c35 0%, transparent 65%),
-    radial-gradient(ellipse 60% 40% at 10% 100%,  #0d3b22 0%, transparent 70%),
-    radial-gradient(ellipse 60% 40% at 90% 100%,  #0a2e1a 0%, transparent 70%),
-    linear-gradient(180deg, #0d3b22 0%, #061a0f 100%);
+  background: var(--bg-gradient);
   padding: 24px 16px;
 }
 
-/* Dekorasi daun latar */
-.zoo-bg-deco {
+/* Ornamen Mengambang Lucu */
+.floating-shapes {
   position: fixed; inset: 0; pointer-events: none; z-index: 0;
-  overflow: hidden;
 }
-.leaf {
-  position: absolute; font-size: 2.4rem; opacity: 0.18;
-  animation: sway 6s ease-in-out infinite;
+.float-item {
+  position: absolute; font-size: 2.8rem; opacity: 0.85;
+  animation: floatBounce 4s ease-in-out infinite alternate;
 }
-.leaf-1 { top:  5%; left:  3%; animation-delay: 0s; }
-.leaf-2 { top:  8%; right: 5%; animation-delay: 1s; font-size:3rem; }
-.leaf-3 { top: 45%; left:  1%; animation-delay: 2s; }
-.leaf-4 { bottom: 10%; right: 3%; animation-delay: 0.5s; }
-.leaf-5 { bottom: 20%; left: 8%; animation-delay: 3s; font-size:2rem; opacity:0.12; }
+.float-1 { top: 6%; left: 8%; animation-delay: 0s; }
+.float-2 { top: 12%; right: 10%; animation-delay: 1.2s; font-size: 3.2rem; }
+.float-3 { bottom: 12%; left: 6%; animation-delay: 2s; }
+.float-4 { bottom: 10%; right: 8%; animation-delay: 0.8s; font-size: 3rem; }
+.float-5 { top: 48%; right: 4%; animation-delay: 2.5s; font-size: 2.2rem; }
 
-@keyframes sway {
-  0%, 100% { transform: rotate(-6deg) scale(1); }
-  50%       { transform: rotate(6deg)  scale(1.05); }
+@keyframes floatBounce {
+  0%   { transform: translateY(0px) rotate(0deg); }
+  100% { transform: translateY(-16px) rotate(8deg); }
 }
 
-/* Kartu utama landing */
-.landing-wrapper {
+.landing-card {
   position: relative; z-index: 1;
-  max-width: 460px; width: 100%;
-  display: flex; flex-direction: column; align-items: center; gap: 18px;
+  max-width: 480px; width: 100%;
+  background: var(--bg-card-glass);
+  backdrop-filter: blur(12px);
+  border-radius: var(--radius-xl);
+  border: 4px solid #FFFFFF;
+  box-shadow: var(--shadow-pop);
+  padding: 30px 24px;
+  display: flex; flex-direction: column; align-items: center; gap: 16px;
+  text-align: center;
 }
 
-/* Lingkaran ikon logo */
-.logo-ring {
-  width: 80px; height: 80px; border-radius: 50%;
-  background: rgba(21,128,61,0.2);
-  border: 3px solid rgba(110,231,183,0.5);
+.landing-mascot-ring {
+  width: 90px; height: 90px;
+  background: linear-gradient(135deg, #FEF08A 0%, #FDE047 100%);
+  border-radius: 50%;
+  border: 4px solid #FFFFFF;
+  box-shadow: 0 8px 16px rgba(253, 224, 71, 0.5);
   display: flex; align-items: center; justify-content: center;
+  font-size: 3rem;
+  animation: mascotWiggle 2.5s ease-in-out infinite;
+}
+@keyframes mascotWiggle {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  25% { transform: scale(1.06) rotate(-5deg); }
+  75% { transform: scale(1.06) rotate(5deg); }
+}
+
+.landing-pill {
+  background: #E0E7FF;
+  color: #4F46E5;
+  font-weight: 800;
+  font-size: 0.8rem;
+  padding: 6px 16px;
+  border-radius: var(--radius-pill);
+  border: 1px solid #C7D2FE;
+}
+
+.landing-title {
   font-size: 2.4rem;
-  box-shadow: 0 0 32px rgba(21,128,61,0.4), inset 0 0 16px rgba(110,231,183,0.1);
-  animation: pulseLogo 3s ease-in-out infinite;
+  font-weight: 900;
+  color: #1E293B;
+  line-height: 1.1;
 }
-@keyframes pulseLogo {
-  0%, 100% { box-shadow: 0 0 24px rgba(21,128,61,0.4); }
-  50%       { box-shadow: 0 0 48px rgba(21,128,61,0.65), 0 0 16px rgba(110,231,183,0.3); }
-}
-
-.landing-hero { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px; }
-
-.landing-badge {
-  display: inline-flex; align-items: center; gap: 6px;
-  background: rgba(21,128,61,0.25);
-  border: 1px solid rgba(110,231,183,0.4);
-  color: var(--zoo-mint); padding: 5px 14px;
-  border-radius: 50px; font-size: 0.82rem; font-weight: 700; letter-spacing: 0.4px;
+.landing-title span {
+  color: #0EA5E9;
+  text-shadow: 2px 2px 0px #BAE6FD;
 }
 
-h1.app-title {
-  font-size: 2.6rem; font-weight: 900; color: #fff;
-  text-shadow: 0 2px 12px rgba(0,0,0,0.5);
-  line-height: 1;
-}
-h1.app-title .title-accent {
-  color: var(--zoo-mint);
-  text-shadow: 0 0 24px rgba(110,231,183,0.6);
+.landing-desc {
+  font-size: 0.95rem;
+  color: #475569;
+  line-height: 1.5;
 }
 
-.app-subtitle {
-  font-size: 0.93rem; color: var(--zoo-pale); line-height: 1.55;
-  max-width: 380px; text-align: center;
-}
-
-/* Langkah petunjuk */
-.instructions-box {
+/* Petunjuk Step Card */
+.steps-container {
   width: 100%;
-  background: rgba(13,59,34,0.7);
-  border: 1px solid rgba(110,231,183,0.2);
-  border-radius: var(--radius-lg); padding: 16px;
-  backdrop-filter: blur(8px);
-}
-.instructions-header {
-  font-size: 0.88rem; font-weight: 800; color: var(--zoo-yellow);
-  margin-bottom: 12px; display: flex; align-items: center; gap: 6px;
+  background: #F8FAFC;
+  border-radius: var(--radius-lg);
+  border: 2px dashed #CBD5E1;
+  padding: 14px;
+  display: flex; flex-direction: column; gap: 10px;
+  text-align: left;
 }
 .step-item {
-  display: flex; align-items: flex-start; gap: 10px;
-  font-size: 0.87rem; color: #f3f4f6; line-height: 1.4; margin-bottom: 10px;
+  display: flex; align-items: center; gap: 12px;
 }
-.step-item:last-child { margin-bottom: 0; }
-.step-num {
-  background: var(--zoo-light); color: var(--zoo-dark);
-  font-weight: 900; font-size: 0.78rem;
-  width: 22px; height: 22px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+.step-badge {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: #3B82F6; color: #FFFFFF;
+  font-weight: 900; font-size: 0.85rem;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 3px 0 #1D4ED8;
 }
-
-/* Baris chip satwa */
-.animal-preview-row {
-  display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; width: 100%;
-}
-.animal-chip {
-  background: rgba(21,128,61,0.2);
-  border: 1px solid rgba(110,231,183,0.25);
-  color: var(--zoo-mint); padding: 6px 12px;
-  border-radius: 50px; font-size: 0.8rem; font-weight: 600;
-  animation: fadeChip 0.6s ease both;
-}
-@keyframes fadeChip { from { opacity:0; transform:scale(0.85); } to { opacity:1; transform:scale(1); } }
-
-/* Tombol */
-.btn-group { display: flex; flex-direction: column; gap: 12px; width: 100%; }
-.btn {
-  display: inline-flex; align-items: center; justify-content: center;
-  gap: 10px; padding: 14px 24px; border: none; border-radius: 14px;
-  font-size: 1.05rem; font-weight: 800; cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s;
-  text-decoration: none; user-select: none;
-}
-.btn:active { transform: scale(0.96); }
-.btn-icon { font-size: 1.1em; }
-
-.btn-start {
-  background: linear-gradient(135deg, #22c55e 0%, #15803d 100%);
-  color: #fff;
-  box-shadow: 0 4px 18px rgba(21,128,61,0.5);
-  border: 1px solid rgba(255,255,255,0.15);
-}
-.btn-start:hover { filter: brightness(1.1); }
-
-.btn-secondary {
-  background: rgba(255,255,255,0.1);
-  color: #fff;
-  border: 1px solid rgba(255,255,255,0.22);
-  font-size: 0.95rem;
-}
-.btn-secondary:hover { background: rgba(255,255,255,0.18); }
-
-.btn-back {
-  background: rgba(0,0,0,0.6); color: #fff;
-  padding: 8px 16px; font-size: 0.85rem; border-radius: 50px;
-  border: 1px solid rgba(255,255,255,0.25); font-weight: 700;
+.step-text {
+  font-size: 0.88rem; color: #334155; font-weight: 600;
 }
 
-.landing-footer {
-  font-size: 0.78rem; color: rgba(110,231,183,0.6); text-align: center;
-  padding: 4px 0;
+/* Tombol Aksi */
+.landing-actions {
+  width: 100%; display: flex; flex-direction: column; gap: 12px; margin-top: 6px;
 }
 
 /* ==========================================================================
-   AR SESSION SCREEN – Split Layout
+   AR 3-COLUMN ADVENTURE STUDIO
    ========================================================================== */
 #ar-screen {
   position: fixed; inset: 0; z-index: 10;
-  display: flex; flex-direction: row;
-  background: var(--zoo-dark);
-}
-
-/* ── Panel Kiri: Viewport AR ─────────────────────────────────────────────── */
-#ar-viewport {
-  position: relative;
-  flex: 0 0 55%;       /* 55% lebar layar */
-  height: 100%;
-  background: transparent;
-  overflow: hidden;
-  border-right: 2px solid rgba(110,231,183,0.2);
-}
-
-/* AR scene & video mengisi seluruh kolom kiri */
-#ar-scene-container {
-  position: absolute; inset: 0; z-index: 2; pointer-events: none;
-}
-
-video#arjs-video, video {
-  position: absolute !important;
-  top: 50% !important; left: 50% !important;
-  transform: translate(-50%, -50%) !important;
-  min-width: 100% !important; min-height: 100% !important;
-  width: 100% !important; height: 100% !important;
-  object-fit: cover !important;
-  z-index: 1 !important; pointer-events: none;
-}
-
-.a-canvas {
-  position: absolute !important;
-  top: 0 !important; left: 0 !important;
-  transform: none !important;
-  width: 100% !important; height: 100% !important;
-  z-index: 3 !important;
-  background: transparent !important;
-  pointer-events: none;
-}
-
-/* Top bar di atas kamera */
-#ar-topbar {
-  position: absolute; top: 0; left: 0; right: 0; z-index: 20;
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 12px 14px;
-  background: linear-gradient(to bottom, rgba(0,0,0,0.65) 0%, transparent 100%);
-  pointer-events: auto;
-}
-
-.app-pill {
-  background: rgba(10,46,26,0.88); color: var(--zoo-mint);
-  padding: 7px 14px; border-radius: 50px; font-size: 0.82rem; font-weight: 800;
-  border: 1px solid rgba(110,231,183,0.4); backdrop-filter: blur(8px);
-}
-
-/* Scan hint bar di bawah viewport */
-.scan-hint-bar {
-  position: absolute; bottom: 0; left: 0; right: 0; z-index: 20;
-  background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
-  color: var(--zoo-yellow); font-size: 0.85rem; font-weight: 700;
-  text-align: center; padding: 24px 16px 14px;
-  animation: pulseHint 2.5s ease-in-out infinite;
-  pointer-events: none;
-}
-@keyframes pulseHint {
-  0%, 100% { opacity: 0.85; }
-  50%       { opacity: 1; }
-}
-
-/* ── Panel Kanan: Info Sidebar ───────────────────────────────────────────── */
-#info-sidebar {
-  flex: 1;
-  height: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
-  -ms-overflow-style: none; scrollbar-width: none;
-  background:
-    linear-gradient(135deg, #0d3b22 0%, #0a2e1a 60%, #061a0f 100%);
-  position: relative;
   display: flex; flex-direction: column;
-}
-#info-sidebar::-webkit-scrollbar { display: none; }
-
-/* Ornamen dekorasi sidebar */
-#info-sidebar::before {
-  content: '';
-  position: absolute; top: 0; left: 0; right: 0; height: 3px;
-  background: linear-gradient(90deg, #22c55e, #6ee7b7, #22c55e);
-  z-index: 2;
-}
-
-/* -- Sidebar IDLE -- */
-#sidebar-idle {
-  padding: 20px 16px 24px;
-  display: flex; flex-direction: column; align-items: center; gap: 14px;
-  min-height: 100%;
-}
-
-.idle-icon {
-  font-size: 3.5rem; margin-top: 8px;
-  animation: bounce 2s ease-in-out infinite;
-}
-@keyframes bounce {
-  0%, 100% { transform: translateY(0); }
-  50%       { transform: translateY(-10px); }
-}
-
-.idle-title {
-  font-size: 1.25rem; font-weight: 800; color: var(--zoo-mint); text-align: center;
-}
-.idle-desc {
-  font-size: 0.85rem; color: var(--zoo-pale); text-align: center; line-height: 1.5;
-}
-
-.idle-tips {
-  width: 100%;
-  background: rgba(13,59,34,0.6);
-  border: 1px solid rgba(110,231,183,0.18);
-  border-radius: var(--radius-lg); padding: 14px 16px;
-  display: flex; flex-direction: column; gap: 8px;
-}
-.tip-row {
-  font-size: 0.83rem; color: #f3f4f6; line-height: 1.35;
-}
-
-.animal-gallery-label {
-  font-size: 0.82rem; font-weight: 700; color: var(--zoo-yellow);
-  align-self: flex-start;
-}
-.animal-gallery {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; width: 100%;
-}
-.gallery-btn {
-  background: rgba(21,128,61,0.18);
-  border: 1px solid rgba(110,231,183,0.2);
-  border-radius: var(--radius-md);
-  padding: 10px 6px; cursor: pointer;
-  display: flex; flex-direction: column; align-items: center; gap: 4px;
-  transition: background 0.2s ease, border-color 0.2s ease;
-  color: #fff;
-}
-.gallery-btn:hover, .gallery-btn.active {
-  background: rgba(21,128,61,0.4);
-  border-color: var(--zoo-mint);
-}
-.gallery-btn .gb-emoji { font-size: 1.5rem; }
-.gallery-btn .gb-name  { font-size: 0.65rem; color: var(--zoo-pale); font-weight: 600; text-align: center; line-height: 1.2; }
-
-/* -- Sidebar ACTIVE -- */
-#sidebar-active {
-  padding: 0 0 20px;
-  display: flex; flex-direction: column; gap: 0;
-}
-
-.satwa-header {
-  background: linear-gradient(135deg, rgba(21,128,61,0.4) 0%, rgba(13,59,34,0.6) 100%);
-  border-bottom: 1px solid rgba(110,231,183,0.18);
-  padding: 16px;
-  display: flex; align-items: center; gap: 12px;
-  position: sticky; top: 0; z-index: 5;
-}
-
-.satwa-emoji {
-  font-size: 2.4rem; flex-shrink: 0;
-  animation: popIn 0.4s cubic-bezier(0.16,1,0.3,1) both;
-}
-@keyframes popIn {
-  from { transform: scale(0.5); opacity: 0; }
-  to   { transform: scale(1);   opacity: 1; }
-}
-
-.satwa-titles { flex: 1; min-width: 0; }
-#satwa-name {
-  font-size: 1.1rem; font-weight: 900; color: #fff; line-height: 1.1;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-#satwa-latin {
-  font-size: 0.75rem; font-style: italic; color: var(--zoo-pale); margin-top: 2px;
-}
-
-/* Status badge */
-.status-badge {
-  font-size: 0.65rem; font-weight: 800; padding: 4px 10px;
-  border-radius: 20px; text-transform: uppercase;
-  letter-spacing: 0.5px; white-space: nowrap; flex-shrink: 0;
-}
-.badge-critical  { background: var(--zoo-red);    color: #fff; box-shadow: 0 0 10px rgba(239,68,68,0.5); }
-.badge-endangered{ background: var(--zoo-yellow); color: #1f2937; box-shadow: 0 0 10px rgba(251,191,36,0.4); }
-
-/* Preview 3D container */
-#preview-3d-container {
-  position: relative;
-  margin: 12px 14px 0;
-  height: 180px;
-  border-radius: var(--radius-lg);
+  background: #F1F5F9;
   overflow: hidden;
-  background: radial-gradient(ellipse at center, #0f4a28 0%, #061a0f 100%);
-  border: 1px solid rgba(110,231,183,0.2);
-  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
 }
-.preview-label {
-  position: absolute; bottom: 8px; right: 10px; z-index: 5;
-  font-size: 0.65rem; color: rgba(110,231,183,0.6); pointer-events: none;
+
+/* Top Navigation Bar */
+#ar-header {
+  height: 64px;
+  background: #FFFFFF;
+  border-bottom: 3px solid #E2E8F0;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 20px;
+  z-index: 30;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+}
+
+.ar-logo-badge {
+  display: flex; align-items: center; gap: 10px;
+  font-weight: 900; font-size: 1.15rem; color: #0F172A;
+}
+.ar-logo-icon {
+  font-size: 1.5rem;
+}
+
+.ar-stats-chip {
+  background: #FEF3C7;
+  color: #92400E;
+  border: 1px solid #FDE68A;
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  font-size: 0.85rem;
+  font-weight: 800;
+  display: flex; align-items: center; gap: 6px;
+}
+
+/* Main 3-Column Studio Body */
+#ar-workspace {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 310px 1.4fr 340px; /* 3 KOLOM: Kiri, Kamera Tengah, Kanan */
+  overflow: hidden;
+  position: relative;
+  background: #E2E8F0;
+  gap: 10px;
+  padding: 10px 10px 0 10px;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   KOLOM 1 (KIRI): Studio 3D Interaktif & Tombol Suara Hewan
+   ────────────────────────────────────────────────────────────────────────── */
+#col-preview-studio {
+  background: #FFFFFF;
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  display: flex; flex-direction: column;
+  overflow: hidden;
+  border: 3px solid #E2E8F0;
+  border-bottom: none;
+  box-shadow: var(--shadow-card);
+}
+
+.studio-header {
+  padding: 12px 16px;
+  background: linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%);
+  border-bottom: 2px solid #BBF7D0;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.studio-title {
+  font-weight: 900; font-size: 0.95rem; color: #166534;
+  display: flex; align-items: center; gap: 6px;
+}
+
+/* Canvas Three.js */
+#preview-canvas-wrapper {
+  position: relative;
+  flex: 1;
+  min-height: 200px;
+  background: radial-gradient(circle at center, #F8FAFC 0%, #E2E8F0 100%);
+  display: flex; align-items: center; justify-content: center;
 }
 #preview-3d-canvas {
-  position: absolute; inset: 0; width: 100% !important; height: 100% !important; display: block;
+  width: 100% !important; height: 100% !important;
+  display: block;
 }
 
-/* Info scroll area */
-.info-scroll {
-  padding: 14px 14px 0;
-  display: flex; flex-direction: column; gap: 10px;
+.studio-hint-badge {
+  position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #CBD5E1;
+  border-radius: var(--radius-pill);
+  font-size: 0.72rem; font-weight: 700; color: #475569;
+  padding: 3px 12px; pointer-events: none;
 }
 
-/* Tag region */
-.region-tag {
-  display: inline-flex; align-items: center; gap: 4px;
-  background: rgba(21,128,61,0.25);
-  border: 1px solid rgba(110,231,183,0.3);
-  color: var(--zoo-mint); font-size: 0.75rem; font-weight: 700;
-  padding: 4px 12px; border-radius: 50px;
+/* Kontrol Studio di bawah Preview */
+.studio-controls {
+  padding: 12px;
+  background: #F8FAFC;
+  border-top: 2px solid #E2E8F0;
+  display: flex; flex-direction: column; gap: 8px;
+}
+
+.btn-animal-voice {
+  width: 100%;
+  background: linear-gradient(180deg, #F472B6 0%, #EC4899 100%);
+  color: #FFFFFF;
+  box-shadow: 0 4px 0 #BE185D;
+  font-size: 0.92rem;
+  padding: 10px 14px;
+}
+.btn-animal-voice:active {
+  box-shadow: 0 1px 0 #BE185D;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   KOLOM 2 (TENGAH): Layar Kamera AR (Medium & Fokus)
+   ────────────────────────────────────────────────────────────────────────── */
+#col-camera-ar {
+  background: #0F172A;
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  position: relative;
+  overflow: hidden;
+  display: flex; flex-direction: column;
+  border: 3px solid #CBD5E1;
+  border-bottom: none;
+  box-shadow: var(--shadow-card);
+}
+
+#ar-scene-container {
+  position: absolute; inset: 0;
+  z-index: 2; pointer-events: none;
+}
+
+/* Video Kamera AR & Canvas A-Frame */
+video, #col-camera-ar video, video#arjs-video {
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 100% !important;
+  min-height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+  object-fit: cover !important;
+  z-index: 1 !important;
+  pointer-events: none;
+  margin: 0 !important;
+}
+
+#col-camera-ar .a-canvas, .a-canvas {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 3 !important;
+  pointer-events: none;
+}
+
+/* Bingkai Target Pindai AR yang Menyenangkan */
+.scan-target-frame {
+  position: absolute; inset: 0; z-index: 10;
+  pointer-events: none;
+  display: flex; align-items: center; justify-content: center;
+}
+.target-box {
+  width: 220px; height: 220px;
+  border: 4px dashed rgba(255, 255, 255, 0.7);
+  border-radius: 28px;
+  box-shadow: 0 0 0 9999px rgba(15, 23, 42, 0.35);
+  animation: pulseBox 2s infinite ease-in-out;
+}
+@keyframes pulseBox {
+  0%, 100% { border-color: rgba(255, 255, 255, 0.75); transform: scale(1); }
+  50% { border-color: #38BDF8; transform: scale(1.02); }
+}
+
+/* Banner Status Deteksi AR */
+.camera-status-pill {
+  position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%);
+  z-index: 15;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  color: #0F172A;
+  padding: 8px 20px;
+  border-radius: var(--radius-pill);
+  font-weight: 800; font-size: 0.88rem;
+  border: 2px solid #38BDF8;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+  display: flex; align-items: center; gap: 8px;
+  white-space: nowrap;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   KOLOM 3 (KANAN): Kartu Pengetahuan Satwa (Kaya & Menarik)
+   ────────────────────────────────────────────────────────────────────────── */
+#col-info-details {
+  background: #FFFFFF;
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  border: 3px solid #E2E8F0;
+  border-bottom: none;
+  display: flex; flex-direction: column;
+  overflow-y: auto;
+  box-shadow: var(--shadow-card);
+}
+#col-info-details::-webkit-scrollbar { width: 6px; }
+#col-info-details::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
+
+/* Header Satwa */
+.info-header {
+  padding: 16px;
+  background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+  border-bottom: 2px solid #BFDBFE;
+  position: sticky; top: 0; z-index: 5;
+}
+.info-title-group {
+  display: flex; align-items: center; gap: 12px;
+}
+.animal-avatar {
+  font-size: 2.4rem;
+  background: #FFFFFF;
+  width: 54px; height: 54px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  border: 3px solid #93C5FD;
+  box-shadow: 0 4px 8px rgba(147, 197, 253, 0.5);
+  flex-shrink: 0;
+}
+.animal-names {
+  flex: 1; min-width: 0;
+}
+#info-animal-name {
+  font-size: 1.25rem; font-weight: 900; color: #1E3A8A; line-height: 1.1;
+}
+#info-animal-nickname {
+  font-size: 0.78rem; font-weight: 700; color: #2563EB; margin-top: 2px;
+}
+#info-animal-latin {
+  font-size: 0.72rem; font-style: italic; color: #64748B;
+}
+
+/* Body Info Satwa */
+.info-content {
+  padding: 16px;
+  display: flex; flex-direction: column; gap: 14px;
+}
+
+/* Badge Kategori */
+.category-badge {
   align-self: flex-start;
+  background: #FEE2E2;
+  color: #B91C1C;
+  font-size: 0.75rem; font-weight: 800;
+  padding: 4px 12px; border-radius: var(--radius-pill);
+  border: 1px solid #FCA5A5;
 }
 
-/* Info cards grid */
-.info-cards-grid {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
-}
-.info-card {
-  background: rgba(13,59,34,0.6);
-  border: 1px solid rgba(110,231,183,0.15);
-  border-radius: var(--radius-md); padding: 10px;
+/* Kartu-Kartu Atribut */
+.fact-tile {
+  background: #F8FAFC;
+  border: 2px solid #E2E8F0;
+  border-radius: var(--radius-md);
+  padding: 10px 12px;
   display: flex; flex-direction: column; gap: 4px;
 }
-.info-card-icon { font-size: 1.2rem; }
-.info-card-label { font-size: 0.65rem; font-weight: 800; color: var(--zoo-mint); text-transform: uppercase; letter-spacing: 0.5px; }
-.info-card-value { font-size: 0.78rem; color: #f9fafb; line-height: 1.35; }
+.tile-label {
+  font-size: 0.72rem; font-weight: 800; text-transform: uppercase;
+  color: #64748B; letter-spacing: 0.5px;
+  display: flex; align-items: center; gap: 6px;
+}
+.tile-val {
+  font-size: 0.85rem; font-weight: 700; color: #1E293B; line-height: 1.4;
+}
 
-/* Status card */
-.status-card {
-  background: rgba(13,59,34,0.6);
-  border: 1px solid rgba(110,231,183,0.15);
-  border-radius: var(--radius-md); padding: 10px 12px;
+/* Highlight Kekuatan Super */
+.superpower-card {
+  background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+  border: 2px solid #F59E0B;
+  border-radius: var(--radius-md);
+  padding: 12px;
 }
-.status-card-label { font-size: 0.72rem; font-weight: 800; color: var(--zoo-yellow); margin-bottom: 4px; }
-.status-card-value { font-size: 0.82rem; color: #f9fafb; line-height: 1.4; }
+.superpower-title {
+  font-size: 0.82rem; font-weight: 900; color: #92400E; margin-bottom: 4px;
+  display: flex; align-items: center; gap: 6px;
+}
+.superpower-desc {
+  font-size: 0.84rem; font-weight: 700; color: #78350F; line-height: 1.4;
+}
 
-/* Fakta unik */
-.fact-box {
-  background: linear-gradient(135deg, rgba(251,191,36,0.12) 0%, rgba(249,115,22,0.08) 100%);
-  border-left: 3px solid var(--zoo-yellow);
-  border-radius: 0 var(--radius-md) var(--radius-md) 0;
-  padding: 10px 12px;
+/* Tombol Narasi TTS Anak */
+.btn-narration {
+  width: 100%;
+  background: linear-gradient(180deg, #38BDF8 0%, #0284C7 100%);
+  color: #FFFFFF;
+  box-shadow: 0 4px 0 #0369A1;
+  font-size: 0.95rem;
+  padding: 12px;
+  margin-top: 6px;
 }
-.fact-title { font-size: 0.75rem; font-weight: 900; color: var(--zoo-yellow); margin-bottom: 4px; }
-.fact-text  { font-size: 0.82rem; color: #fff; line-height: 1.45; }
+.btn-narration:active {
+  box-shadow: 0 1px 0 #0369A1;
+}
+.btn-narration.speaking {
+  background: linear-gradient(180deg, #F87171 0%, #DC2626 100%);
+  box-shadow: 0 4px 0 #991B1B;
+}
 
-/* Tombol audio */
-.btn-audio {
-  margin: 0 14px;
-  padding: 12px 16px; border: none; border-radius: var(--radius-md);
-  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-  color: #1f2937; font-size: 0.95rem; font-weight: 900;
-  cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
-  box-shadow: 0 4px 14px rgba(245,158,11,0.4);
-  transition: all 0.2s ease;
+/* ──────────────────────────────────────────────────────────────────────────
+   BARIS BAWAH: RAK KARTU DOCK (Bisa Diklik Langsung oleh Anak-Anak)
+   ────────────────────────────────────────────────────────────────────────── */
+#ar-dock-footer {
+  height: 84px;
+  background: #FFFFFF;
+  border-top: 3px solid #E2E8F0;
+  display: flex; align-items: center;
+  padding: 0 16px;
+  gap: 12px;
+  z-index: 25;
+  box-shadow: 0 -4px 15px rgba(0,0,0,0.05);
 }
-.btn-audio:active { transform: scale(0.97); }
-.btn-audio.playing {
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-  color: #fff; box-shadow: 0 4px 14px rgba(239,68,68,0.45);
+
+.dock-label {
+  font-size: 0.8rem; font-weight: 900; color: #475569;
+  white-space: nowrap;
 }
+
+.dock-scroll-row {
+  display: flex; align-items: center; gap: 10px;
+  overflow-x: auto; overflow-y: hidden;
+  padding: 4px 0;
+  flex: 1;
+}
+.dock-scroll-row::-webkit-scrollbar { height: 4px; }
+.dock-scroll-row::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
+
+.dock-animal-card {
+  background: #F8FAFC;
+  border: 2px solid #E2E8F0;
+  border-radius: var(--radius-md);
+  padding: 6px 12px;
+  display: flex; align-items: center; gap: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+.dock-animal-card:hover, .dock-animal-card.active {
+  background: #EFF6FF;
+  border-color: #3B82F6;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(59, 130, 246, 0.2);
+}
+.dock-emoji { font-size: 1.4rem; }
+.dock-name { font-size: 0.8rem; font-weight: 800; color: #1E293B; }
 
 /* ==========================================================================
-   MODAL KARTU MARKER
+   MODAL KARTU MARKER (Ceria & Jelas)
    ========================================================================== */
 .modal-overlay {
   position: fixed; inset: 0; z-index: 200;
-  background: rgba(0,0,0,0.85); backdrop-filter: blur(10px);
+  background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(6px);
   display: flex; align-items: center; justify-content: center;
   padding: 16px;
 }
 .modal-content {
-  background: linear-gradient(135deg, #0d3b22 0%, #061a0f 100%);
-  border: 1px solid rgba(110,231,183,0.3);
-  border-radius: var(--radius-xl); max-width: 600px; width: 100%;
-  max-height: 90vh; display: flex; flex-direction: column; overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  background: #FFFFFF;
+  border-radius: var(--radius-xl);
+  max-width: 640px; width: 100%;
+  max-height: 88vh; display: flex; flex-direction: column;
+  overflow: hidden;
+  box-shadow: var(--shadow-pop);
+  border: 4px solid #FFFFFF;
 }
 .modal-header {
-  padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.12);
+  padding: 18px 24px;
+  background: #F8FAFC;
+  border-bottom: 2px solid #E2E8F0;
   display: flex; justify-content: space-between; align-items: center;
-  background: rgba(10,46,26,0.6);
 }
-.modal-header h3 { font-size: 1.1rem; color: var(--zoo-mint); }
-.modal-close {
-  background: none; border: none; color: #fff; font-size: 1.6rem; cursor: pointer;
+.modal-title { font-size: 1.2rem; font-weight: 900; color: #0F172A; }
+.modal-body {
+  padding: 20px; overflow-y: auto;
 }
-.modal-body { padding: 16px 20px; overflow-y: auto; }
-.modal-desc { font-size: 0.83rem; color: var(--zoo-pale); margin-bottom: 12px; }
-
-.cards-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px;
+.modal-cards-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 14px;
+  margin-top: 14px;
 }
-.marker-card-item {
-  background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12);
-  border-radius: var(--radius-md); padding: 10px; text-align: center;
+.marker-thumb-card {
+  background: #F8FAFC;
+  border: 2px solid #E2E8F0;
+  border-radius: var(--radius-md);
+  padding: 10px; text-align: center;
   display: flex; flex-direction: column; align-items: center; gap: 4px;
-  transition: border-color 0.2s;
 }
-.marker-card-item:hover { border-color: var(--zoo-mint); }
-.marker-card-item h4 { font-size: 0.8rem; color: var(--zoo-pale); line-height: 1.2; }
-.marker-card-item span { font-size: 0.7rem; color: #94a3b8; }
-.marker-img-wrapper {
-  background: #fff; padding: 8px; border-radius: 8px; margin: 4px 0;
-  display: flex; align-items: center; justify-content: center;
+.marker-thumb-img {
+  width: 90px; height: 90px; background: #FFFFFF; border-radius: 8px; padding: 4px;
+  border: 1px solid #CBD5E1;
 }
-.marker-img-wrapper img { width: 90px; height: 90px; image-rendering: pixelated; display: block; }
 
 /* ==========================================================================
-   ANIMASI GLOBAL
+   RESPONSIF MOBILE (< 900px)
    ========================================================================== */
-@keyframes fadeIn  { from { opacity:0; transform:scale(0.96); } to { opacity:1; transform:scale(1); } }
-@keyframes slideUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
-
-/* ==========================================================================
-   RESPONSIF MOBILE (< 640px) – stack vertikal
-   ========================================================================== */
-@media (max-width: 640px) {
-  #ar-screen {
-    flex-direction: column;
+@media (max-width: 900px) {
+  #ar-workspace {
+    grid-template-columns: 1fr;
+    grid-template-rows: 240px 1fr; /* Kamera atas, Info & Preview bawah bertab */
+    overflow-y: auto;
+    gap: 8px;
+    padding: 8px;
   }
-  #ar-viewport {
-    flex: 0 0 50vh;      /* setengah tinggi layar */
-    border-right: none;
-    border-bottom: 2px solid rgba(110,231,183,0.2);
+  #col-camera-ar {
+    height: 240px;
+    border-radius: var(--radius-lg);
   }
-  #info-sidebar {
-    flex: 1;
-    max-height: 50vh;
+  #col-preview-studio {
+    height: 220px;
+    border-radius: var(--radius-lg);
   }
-  #preview-3d-container { height: 130px; }
-  .info-cards-grid { grid-template-columns: 1fr 1fr; }
-  h1.app-title { font-size: 2rem; }
-  .satwa-header { padding: 12px; }
-  #satwa-name { font-size: 1rem; }
-  .animal-gallery { grid-template-columns: repeat(4, 1fr); }
-}
-
-@media (max-width: 380px) {
-  h1.app-title { font-size: 1.75rem; }
-  .animal-gallery { grid-template-columns: repeat(3, 1fr); }
+  #col-info-details {
+    border-radius: var(--radius-lg);
+  }
+  #ar-dock-footer {
+    height: 72px;
+  }
 }

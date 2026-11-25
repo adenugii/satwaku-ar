@@ -1,134 +1,195 @@
 /**
- * SatwaKu AR – Controller Utama (Revisi UI Zoo Theme)
- * Memenuhi AR-01 hingga AR-17 | Split-screen layout | Preview 3D Interaktif
+ * SatwaKu AR – Controller Utama (3-Kolom Studio Interaktif & SFX Anak)
  */
 
-// ── Emoji & data tambahan untuk gallery/preview ───────────────────────────
-const satwaEmoji = {
-  gajah_sumatera:       "🐘",
-  badak_sumatera:       "🦏",
-  orangutan_sumatera:   "🦧",
-  harimau_sumatera:     "🐯",
-  badak_jawa:           "🦏",
-  macan_tutul_jawa:     "🐆",
-  jalak_bali:           "🦜",
-  orangutan_kalimantan: "🦧",
-  bekantan:             "🐒",
-  anoa:                 "🐃",
-  babirusa:             "🐗",
-  tarsius:              "🐺"
+// Mapping Emoji Satwa
+const satwaEmojiMap = {
+  animal_01: "🐘",
+  animal_02: "🦏",
+  animal_03: "🦁",
+  animal_04: "🐯",
+  animal_05: "🦓",
+  animal_06: "🐪",
+  animal_07: "🐢",
+  animal_08: "🦎",
+  animal_09: "🐍",
+  animal_10: "🐦",
+  animal_11: "🐟",
+  animal_12: "🐬"
 };
 
-const satwaRegion = {
-  gajah_sumatera:       "Sumatra",
-  badak_sumatera:       "Sumatra",
-  orangutan_sumatera:   "Sumatra",
-  harimau_sumatera:     "Sumatra",
-  badak_jawa:           "Jawa",
-  macan_tutul_jawa:     "Jawa",
-  jalak_bali:           "Bali",
-  orangutan_kalimantan: "Kalimantan",
-  bekantan:             "Kalimantan",
-  anoa:                 "Sulawesi",
-  babirusa:             "Sulawesi",
-  tarsius:              "Sulawesi"
-};
-
-// ── State Controller ───────────────────────────────────────────────────────
+// State Controller
 const ARState = {
-  activeAnimalId:   null,
-  isScanning:       false,
-  isAudioPlaying:   false,
-  audioElement:     null,
-  detectionTimer:   null,
-  speechSynth:      window.speechSynthesis || null,
-  currentUtterance: null,
-  videoObserver:    null,
-  previewScene:     null,
-  previewCamera:    null,
-  previewRenderer:  null,
-  previewModel:     null,
-  previewAnimId:    null
+  activeAnimalId: "animal_01", // Default preview awal
+  discoveredSet: new Set(),
+  isScanning: false,
+  isSpeaking: false,
+  detectionTimer: null,
+  videoObserver: null,
+  // Three.js Preview Studio State
+  previewScene: null,
+  previewCamera: null,
+  previewRenderer: null,
+  previewModel: null,
+  previewAnimId: null,
+  previewAngle: { x: 0.1, y: 0 },
+  previewScale: 1,
+  previewMaxDim: 1,
+  previewInteract: null
 };
 
-// ── Init ──────────────────────────────────────────────────────────────────
+// ── Inisialisasi saat DOM Siap ─────────────────────────────────────────────
 document.addEventListener("DOMContentLoaded", () => {
   setupVideoObserver();
-  buildAnimalGallery();
+  buildDockAnimalList();
+  // Set default view satwa pertama (Gajah)
+  selectAnimal("animal_01", false);
 });
 
-// ── Animal Gallery (panel idle) ───────────────────────────────────────────
-function buildAnimalGallery() {
-  const gallery = document.getElementById("animal-gallery");
-  if (!gallery || !satwaData) return;
+// ── Bangun Dock Navigasi Satwa di Bagian Bawah Layar ────────────────────────
+function buildDockAnimalList() {
+  const dock = document.getElementById("dock-animal-list");
+  if (!dock || typeof satwaData === "undefined") return;
 
+  dock.innerHTML = "";
   Object.values(satwaData).forEach(animal => {
-    const btn = document.createElement("button");
-    btn.className = "gallery-btn";
-    btn.dataset.id = animal.id;
-    btn.innerHTML = `
-      <span class="gb-emoji">${satwaEmoji[animal.id] || "🐾"}</span>
-      <span class="gb-name">${animal.name}</span>
+    const card = document.createElement("div");
+    card.className = "dock-animal-card";
+    card.id = `dock-item-${animal.id}`;
+    card.innerHTML = `
+      <span class="dock-emoji">${satwaEmojiMap[animal.id] || "🐾"}</span>
+      <span class="dock-name">${animal.name}</span>
     `;
-    btn.addEventListener("click", () => previewAnimal(animal.id));
-    gallery.appendChild(btn);
+    card.addEventListener("click", () => {
+      soundMgr.playPop();
+      selectAnimal(animal.id, false);
+    });
+    dock.appendChild(card);
   });
 }
 
-/** Tampilkan preview 3D satwa di panel idle (tanpa scan marker) */
-function previewAnimal(animalId) {
+// ── Pilih Satwa (Update Studio Kiri, Info Kanan, & Highlight Dock) ──────────
+function selectAnimal(animalId, isFromMarker = false) {
   const data = satwaData[animalId];
   if (!data) return;
 
-  // Aktifkan tampilan sidebar-active
-  showSidebarActive(animalId);
+  ARState.activeAnimalId = animalId;
 
-  // Update preview model 3D
-  updatePreviewModel(data.model, data.scale);
-
-  // Tandai gallery button aktif
-  document.querySelectorAll(".gallery-btn").forEach(b => {
-    b.classList.toggle("active", b.dataset.id === animalId);
-  });
-}
-
-// ── Video Observer & Camera Fix ───────────────────────────────────────────
-function setupVideoObserver() {
-  if (ARState.videoObserver) return;
-  ARState.videoObserver = new MutationObserver(fixCameraVideoElements);
-  ARState.videoObserver.observe(document.body, { childList: true, subtree: true });
-}
-
-function fixCameraVideoElements() {
-  const viewport = document.getElementById("ar-viewport");
-  document.querySelectorAll("video").forEach(video => {
-    if (!video.hasAttribute("playsinline")) {
-      video.setAttribute("playsinline", "");
-      video.setAttribute("webkit-playsinline", "");
-      video.setAttribute("autoplay", "");
-      video.muted = true;
+  // Efek suara jika ditemukan lewat marker AR
+  if (isFromMarker) {
+    if (!ARState.discoveredSet.has(animalId)) {
+      ARState.discoveredSet.add(animalId);
+      soundMgr.playDiscoveryFanfare();
+      updateDiscoveryBadge();
+    } else {
+      soundMgr.playPop();
     }
-    // Jika video berada di body, pindahkan ke ar-viewport agar tepat berada di belakang AR canvas
-    if (viewport && video.parentElement !== viewport && video.id !== "preview-video") {
-      viewport.appendChild(video);
+  }
+
+  // Update Highlight Dock Bawah
+  document.querySelectorAll(".dock-animal-card").forEach(el => {
+    el.classList.toggle("active", el.id === `dock-item-${animalId}`);
+  });
+  const activeDockItem = document.getElementById(`dock-item-${animalId}`);
+  if (activeDockItem) {
+    activeDockItem.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+  }
+
+  // 1. Update Kolom Kiri (Studio 3D)
+  const studioBadge = document.getElementById("studio-animal-badge");
+  if (studioBadge) studioBadge.innerText = data.category || "3D Studio";
+  updatePreviewModel(data.model);
+
+  // 2. Update Kolom Kanan (Kartu Pengetahuan)
+  const avatar = document.getElementById("info-avatar");
+  if (avatar) avatar.innerText = satwaEmojiMap[animalId] || "🐾";
+
+  const nameEl = document.getElementById("info-animal-name");
+  if (nameEl) nameEl.innerText = data.name;
+
+  const nicknameEl = document.getElementById("info-animal-nickname");
+  if (nicknameEl) nicknameEl.innerText = data.nickname || data.name;
+
+  const latinEl = document.getElementById("info-animal-latin");
+  if (latinEl) latinEl.innerText = data.latinName;
+
+  const badgeStatus = document.getElementById("info-badge-status");
+  if (badgeStatus) badgeStatus.innerText = data.badge;
+
+  const habitatEl = document.getElementById("info-habitat");
+  if (habitatEl) habitatEl.innerText = `${data.region} (${data.habitat})`;
+
+  const foodEl = document.getElementById("info-food");
+  if (foodEl) foodEl.innerText = `${data.food} [${data.dietType || "Herbivora"}]`;
+
+  const sizeEl = document.getElementById("info-size");
+  if (sizeEl) sizeEl.innerText = data.bodySize || "-";
+
+  const superpowerEl = document.getElementById("info-superpower");
+  if (superpowerEl) superpowerEl.innerText = data.superpower || data.fact;
+
+  const triviaEl = document.getElementById("info-trivia");
+  if (triviaEl) triviaEl.innerText = data.fact;
+
+  // Reset Tombol Narasi Suara
+  resetAudioNarrationButton();
+}
+
+function updateDiscoveryBadge() {
+  const badge = document.getElementById("ar-discovered-count");
+  if (badge) {
+    badge.innerText = `${ARState.discoveredSet.size} / 12 Satwa`;
+  }
+}
+
+// ── Putar Suara Khas Hewan ────────────────────────────────────────────────
+function playCurrentAnimalSound() {
+  soundMgr.playPop();
+  if (!ARState.activeAnimalId) return;
+  soundMgr.playAnimalRoar(ARState.activeAnimalId);
+}
+
+// ── Narasi Suara Anak (Kids Tuned TTS) ─────────────────────────────────────
+function toggleAudioNarration() {
+  if (ARState.isSpeaking) {
+    soundMgr.stopSpeech();
+    resetAudioNarrationButton();
+    ARState.isSpeaking = false;
+  } else {
+    const data = satwaData[ARState.activeAnimalId];
+    if (!data) return;
+
+    ARState.isSpeaking = true;
+    const btn = document.getElementById("btn-audio-narration");
+    if (btn) {
+      btn.classList.add("speaking");
+      btn.innerHTML = `<span>⏹ Berhenti Mendengarkan</span>`;
     }
-  });
+
+    soundMgr.speakForKids(data.narration, () => {
+      resetAudioNarrationButton();
+      ARState.isSpeaking = false;
+    });
+  }
 }
 
-function setupOrientationHandler() {
-  window.addEventListener("orientationchange", () => {
-    setTimeout(() => window.dispatchEvent(new Event("resize")), 300);
-  });
+function resetAudioNarrationButton() {
+  const btn = document.getElementById("btn-audio-narration");
+  if (btn) {
+    btn.classList.remove("speaking");
+    btn.innerHTML = `<span>📢 Ceritakan Kisah Hewan Ini!</span>`;
+  }
 }
 
-// ── Mulai Sesi AR (AR-04 s.d AR-08) ─────────────────────────────────────
+// ── Inisialisasi & Logika Sesi AR (AR-04 s.d AR-08) ───────────────────────
 async function startAR() {
+  soundMgr.initContext();
   document.getElementById("landing-screen").classList.add("hidden");
   document.getElementById("error-screen").classList.add("hidden");
 
   try {
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-      throw new Error("getUserMedia tidak didukung. Gunakan HTTPS atau localhost.");
+      throw new Error("getUserMedia tidak didukung browser ini.");
     }
 
     // Minta izin kamera
@@ -138,31 +199,33 @@ async function startAR() {
     });
     testStream.getTracks().forEach(t => t.stop());
 
-    // Tampilkan ar-screen (split view)
+    // Tampilkan Layar AR 3-Kolom
     document.getElementById("ar-screen").classList.remove("hidden");
 
-    // Injeksi AR scene ke viewport
+    // Injeksi Scene AR.js ke Kolom Tengah
     const container = document.getElementById("ar-scene-container");
-    const template  = document.getElementById("ar-scene-template");
+    const template = document.getElementById("ar-scene-template");
     container.innerHTML = "";
     container.appendChild(template.content.cloneNode(true));
 
     ARState.isScanning = true;
-    startDetectionTimeout();
+    startScanTimer();
 
-    // Daftarkan event marker setelah scene loaded
+    // Pastikan preview canvas aktif
+    setTimeout(() => {
+      selectAnimal(ARState.activeAnimalId || "animal_01", false);
+    }, 200);
+
     const scene = container.querySelector("a-scene");
     if (scene) {
       const onLoaded = () => {
-        configureRendererQuality(scene);
         registerMarkerEvents();
-        setupOrientationHandler();
         fixCameraVideoElements();
       };
       scene.hasLoaded ? onLoaded() : scene.addEventListener("loaded", onLoaded);
     }
 
-    // Polling video fix saat init AR.js
+    // Monitoring video element
     let attempts = 0;
     const iv = setInterval(() => {
       fixCameraVideoElements();
@@ -170,99 +233,44 @@ async function startAR() {
     }, 400);
 
   } catch (err) {
-    console.error("Gagal memulai AR:", err);
+    console.error("Gagal start AR:", err);
     showCameraError(err.name || "CameraError");
   }
 }
 
-// ── Error Kamera (AR-06, AR-08) ───────────────────────────────────────────
 function showCameraError(errorType) {
-  let msg = "Izin kamera ditolak atau kamera tidak tersedia.";
+  let msg = "Izin kamera tidak aktif. Pastikan izin kamera telah disetujui di browser.";
   if (errorType === "NotAllowedError" || errorType === "PermissionDeniedError") {
-    msg = "Akses kamera ditolak. Ubah izin Kamera menjadi 'Izinkan' di pengaturan browser.";
+    msg = "Izin akses kamera ditolak. Tolong izinkan kamera di setelan browser ya!";
   } else if (errorType === "NotFoundError") {
-    msg = "Perangkat kamera tidak ditemukan.";
-  } else if (location.protocol !== "https:" && location.hostname !== "localhost") {
-    msg = "Akses kamera memerlukan HTTPS atau localhost.";
+    msg = "Kamera tidak ditemukan di perangkat ini.";
   }
   document.getElementById("error-msg").innerText = msg;
   document.getElementById("landing-screen").classList.add("hidden");
   document.getElementById("error-screen").classList.remove("hidden");
 }
 
-// ── Timeout deteksi 10 detik (AR-15) ─────────────────────────────────────
-function startDetectionTimeout() {
-  clearDetectionTimeout();
-  const hint = document.getElementById("scan-hint");
-  if (hint) hint.innerText = "🔍 Arahkan kamera ke kartu satwa...";
+function endSession() {
+  soundMgr.stopSpeech();
+  ARState.isScanning = false;
 
-  ARState.detectionTimer = setTimeout(() => {
-    if (ARState.isScanning && !ARState.activeAnimalId) {
-      const h = document.getElementById("scan-hint");
-      if (h) h.innerText = "💡 Belum terdeteksi. Cek posisi, jarak (20–30 cm), & pencahayaan kartu.";
+  // Matikan track kamera
+  document.querySelectorAll("video").forEach(v => {
+    if (v.srcObject) {
+      v.srcObject.getTracks().forEach(t => t.stop());
+      v.srcObject = null;
     }
-  }, 10000);
-}
-
-function clearDetectionTimeout() {
-  if (ARState.detectionTimer) {
-    clearTimeout(ARState.detectionTimer);
-    ARState.detectionTimer = null;
-  }
-}
-
-// ── Kualitas Renderer ─────────────────────────────────────────────────────
-function configureRendererQuality(scene) {
-  if (!scene || !scene.renderer) return;
-  const r = scene.renderer;
-  if (typeof THREE !== "undefined") {
-    if (THREE.sRGBEncoding)        r.outputEncoding     = THREE.sRGBEncoding;
-    if (THREE.ACESFilmicToneMapping) {
-      r.toneMapping         = THREE.ACESFilmicToneMapping;
-      r.toneMappingExposure = 1.15;
-    }
-  }
-}
-
-// ── Material Enhancer ─────────────────────────────────────────────────────
-function enhanceModelVisuals(modelEntity, animalId) {
-  if (!modelEntity) return;
-  const apply = () => {
-    const mesh = modelEntity.getObject3D("mesh");
-    if (!mesh) return;
-    mesh.traverse(node => {
-      if (node.isMesh && node.material) {
-        const mats = Array.isArray(node.material) ? node.material : [node.material];
-        mats.forEach(mat => {
-          if (mat.map && typeof THREE !== "undefined") {
-            mat.map.encoding = THREE.sRGBEncoding;
-            mat.map.needsUpdate = true;
-          }
-          if (mat.isMeshStandardMaterial || mat.isMeshPhysicalMaterial) {
-            mat.metalness = 0.0;
-            mat.roughness = 0.55;
-            mat.needsUpdate = true;
-          }
-        });
-      }
-    });
-  };
-  if (modelEntity.getObject3D("mesh")) apply();
-  modelEntity.addEventListener("model-loaded", apply);
-  modelEntity.addEventListener("model-error", e => console.error("❌ Model error:", animalId, e.detail));
-}
-
-if (typeof AFRAME !== "undefined" && !AFRAME.components["satwa-model-enhancer"]) {
-  AFRAME.registerComponent("satwa-model-enhancer", {
-    init() {
-      const parentMarker = this.el.closest("a-marker");
-      const animalId     = parentMarker ? parentMarker.getAttribute("data-satwa-id") : "satwa";
-      enhanceModelVisuals(this.el, animalId);
-    }
+    v.remove();
   });
+
+  const container = document.getElementById("ar-scene-container");
+  if (container) container.innerHTML = "";
+
+  document.getElementById("ar-screen").classList.add("hidden");
+  document.getElementById("landing-screen").classList.remove("hidden");
 }
 
-// ── Daftar Event Marker ───────────────────────────────────────────────────
+// ── Pendaftaran Event Marker AR ──────────────────────────────────────────
 function registerMarkerEvents() {
   const container = document.getElementById("ar-scene-container");
   if (!container) return;
@@ -270,102 +278,102 @@ function registerMarkerEvents() {
   container.querySelectorAll("a-marker").forEach(marker => {
     const animalId = marker.getAttribute("data-satwa-id");
     if (!animalId) return;
-    marker.addEventListener("markerFound", () => onMarkerFound(animalId));
-    marker.addEventListener("markerLost",  () => onMarkerLost(animalId));
 
-    const model = marker.querySelector("[gltf-model]");
-    if (model) enhanceModelVisuals(model, animalId);
+    marker.addEventListener("markerFound", () => {
+      updateScanStatus(`✨ Kartu ${satwaData[animalId]?.name || "Satwa"} Terdeteksi!`, "🎉");
+      selectAnimal(animalId, true);
+    });
+
+    marker.addEventListener("markerLost", () => {
+      updateScanStatus("Arahkan kamera ke kartu satwa...", "🔍");
+    });
   });
 }
 
-// ── Marker Ditemukan (AR-09, AR-11, AR-12, AR-16) ────────────────────────
-function onMarkerFound(animalId) {
-  const data = satwaData[animalId];
-  if (!data) return;
-
-  if (ARState.activeAnimalId && ARState.activeAnimalId !== animalId) stopAudio();
-
-  ARState.activeAnimalId = animalId;
-  clearDetectionTimeout();
-
-  const hint = document.getElementById("scan-hint");
-  if (hint) hint.innerText = `✨ ${data.name} terdeteksi!`;
-
-  // Tampilkan panel aktif
-  showSidebarActive(animalId);
-
-  // Update preview model 3D ke model yang di-scan
-  updatePreviewModel(data.model, data.scale);
+function updateScanStatus(text, icon = "🔍") {
+  const textEl = document.getElementById("scan-status-text");
+  const iconEl = document.getElementById("scan-status-icon");
+  if (textEl) textEl.innerText = text;
+  if (iconEl) iconEl.innerText = icon;
 }
 
-// ── Marker Hilang (AR-14) ─────────────────────────────────────────────────
-function onMarkerLost(animalId) {
-  if (ARState.activeAnimalId !== animalId) return;
-
-  ARState.activeAnimalId = null;
-  stopAudio();
-
-  const hint = document.getElementById("scan-hint");
-  if (hint) hint.innerText = "🎯 Arahkan kembali ke kartu satwa.";
-
-  // Kembali ke idle
-  document.getElementById("sidebar-idle").classList.remove("hidden");
-  document.getElementById("sidebar-active").classList.add("hidden");
-
-  startDetectionTimeout();
+function startScanTimer() {
+  if (ARState.detectionTimer) clearTimeout(ARState.detectionTimer);
+  ARState.detectionTimer = setTimeout(() => {
+    if (ARState.isScanning && ARState.discoveredSet.size === 0) {
+      updateScanStatus("Belum terdeteksi? Pastikan pencahayaan cukup ya!", "💡");
+    }
+  }, 10000);
 }
 
-// ── Tampilkan Panel Aktif ─────────────────────────────────────────────────
-function showSidebarActive(animalId) {
-  const data = satwaData[animalId];
-  if (!data) return;
-
-  document.getElementById("sidebar-idle").classList.add("hidden");
-  document.getElementById("sidebar-active").classList.remove("hidden");
-
-  // Isi data
-  document.getElementById("satwa-emoji").innerText = satwaEmoji[animalId] || "🐾";
-  document.getElementById("satwa-name").innerText   = data.name;
-  document.getElementById("satwa-latin").innerText  = data.latinName;
-
-  const badge = document.getElementById("satwa-badge");
-  badge.innerText   = data.badge;
-  badge.className   = `status-badge ${data.statusType === "critical" ? "badge-critical" : "badge-endangered"}`;
-
-  const regionTag = document.getElementById("satwa-region-tag");
-  if (regionTag) regionTag.innerText = `📍 ${satwaRegion[animalId] || data.region || "Indonesia"}`;
-
-  document.getElementById("satwa-habitat").innerText = data.habitat;
-  document.getElementById("satwa-food").innerText    = data.food;
-  document.getElementById("satwa-status").innerText  = data.status;
-  document.getElementById("satwa-fact").innerText    = data.fact;
-
-  resetAudioButton();
+// ── Penyesuaian Elemen Video Kamera di Kolom Tengah ───────────────────────
+function setupVideoObserver() {
+  if (ARState.videoObserver) return;
+  ARState.videoObserver = new MutationObserver(fixCameraVideoElements);
+  ARState.videoObserver.observe(document.body, { childList: true, subtree: true });
 }
 
-// ── Preview 3D (panel kanan menggunakan Three.js murni) ────────────────────
+function fixCameraVideoElements() {
+  const colCamera = document.getElementById("col-camera-ar");
+  document.querySelectorAll("video").forEach(video => {
+    if (!video.hasAttribute("playsinline")) {
+      video.setAttribute("playsinline", "");
+      video.setAttribute("webkit-playsinline", "");
+      video.setAttribute("autoplay", "");
+      video.muted = true;
+    }
+    // Hapus inline width/height/margin/top/left yang sering diinjeksi AR.js secara otomatis
+    video.style.marginLeft = "0px";
+    video.style.marginTop = "0px";
+    video.style.top = "50%";
+    video.style.left = "50%";
+    video.style.transform = "translate(-50%, -50%)";
+    video.style.width = "100%";
+    video.style.height = "100%";
+    video.style.objectFit = "cover";
+
+    if (colCamera && video.parentElement !== colCamera) {
+      colCamera.appendChild(video);
+    }
+  });
+
+  // Pastikan canvas a-scene juga mengikuti ukuran container col-camera-ar
+  if (colCamera) {
+    const canvas = colCamera.querySelector(".a-canvas");
+    if (canvas) {
+      canvas.style.width = "100%";
+      canvas.style.height = "100%";
+      canvas.style.top = "0px";
+      canvas.style.left = "0px";
+    }
+  }
+}
+
+// ── Mini Studio 3D Interaktif (Three.js Engine) ───────────────────────────
 function initPreview3D() {
   const canvas = document.getElementById("preview-3d-canvas");
   if (!canvas || ARState.previewRenderer || typeof THREE === "undefined") return;
 
-  const width = canvas.clientWidth || 300;
-  const height = canvas.clientHeight || 180;
+  const wrapper = document.getElementById("preview-canvas-wrapper");
+  const width = wrapper ? wrapper.clientWidth : 300;
+  const height = wrapper ? wrapper.clientHeight : 220;
 
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
-  camera.position.set(0, 1, 2.5);
+  // Kamera diarahkan agak rendah dan memandang ke atas objek agar model berada di tengah atas
+  camera.position.set(0, 0.8, 2.7);
 
   const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
   renderer.setSize(width, height, false);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
 
-  // Lighting
-  const ambient = new THREE.AmbientLight(0xffffff, 0.8);
+  // Tata Cahaya Lembut & Cerah
+  const ambient = new THREE.AmbientLight(0xffffff, 0.9);
   scene.add(ambient);
-  const dir1 = new THREE.DirectionalLight(0xfffdf5, 1.2);
+  const dir1 = new THREE.DirectionalLight(0xfffdf5, 1.4);
   dir1.position.set(2, 4, 2);
   scene.add(dir1);
-  const dir2 = new THREE.DirectionalLight(0xd0f0ff, 0.6);
+  const dir2 = new THREE.DirectionalLight(0xe0f2fe, 0.7);
   dir2.position.set(-2, 2, -1);
   scene.add(dir2);
 
@@ -373,23 +381,34 @@ function initPreview3D() {
   ARState.previewCamera = camera;
   ARState.previewRenderer = renderer;
 
-  // Animation loop
+  // Loop Render & Rotasi Otomatis yang Lebih Lambat dan Tenang (Kecepatan dikurangi dari 0.012 menjadi 0.0035)
   function animate() {
     ARState.previewAnimId = requestAnimationFrame(animate);
-    if (ARState.previewModel) {
-      ARState.previewModel.rotation.y += 0.015;
+    if (ARState.previewModel && !(ARState.previewInteract && ARState.previewInteract.dragging)) {
+      ARState.previewModel.rotation.y += 0.0035;
     }
     renderer.render(scene, camera);
   }
   animate();
+
+  attachPreviewInteraction();
+
+  // Resize listener
+  window.addEventListener("resize", () => {
+    if (!ARState.previewRenderer || !wrapper) return;
+    const w = wrapper.clientWidth;
+    const h = wrapper.clientHeight;
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+    renderer.setSize(w, h, false);
+  });
 }
 
-function updatePreviewModel(modelSrc, scaleStr) {
+function updatePreviewModel(modelSrc) {
   if (!modelSrc) return;
   initPreview3D();
   if (!ARState.previewScene || typeof THREE === "undefined") return;
 
-  // Hapus model sebelumnya
   if (ARState.previewModel) {
     ARState.previewScene.remove(ARState.previewModel);
     ARState.previewModel = null;
@@ -400,132 +419,83 @@ function updatePreviewModel(modelSrc, scaleStr) {
     modelSrc,
     gltf => {
       const model = gltf.scene;
-
-      // Hitung bounding box untuk auto-center dan scaling
       const box = new THREE.Box3().setFromObject(model);
       const size = new THREE.Vector3();
       box.getSize(size);
       const center = new THREE.Vector3();
       box.getCenter(center);
 
-      // Center model
+      // Pusatkan objek di X dan Z
       model.position.x = -center.x;
-      model.position.y = -box.min.y;
+      model.position.y = -center.y; // Centered vertical pivot
       model.position.z = -center.z;
 
-      const wrapper = new THREE.Group();
-      wrapper.add(model);
+      const group = new THREE.Group();
+      group.add(model);
 
       const maxDim = Math.max(size.x, size.y, size.z) || 1;
-      const targetScale = 1.3 / maxDim;
-      wrapper.scale.set(targetScale, targetScale, targetScale);
-      wrapper.position.set(0, -0.4, 0);
+      ARState.previewMaxDim = maxDim;
+      const baseScale = 1.3 / maxDim;
+      group.scale.setScalar(baseScale * (ARState.previewScale || 1));
+      
+      // Naikkan posisi model lebih tinggi ke atas lagi (Y = 0.50)
+      group.position.set(0, 0.90, 0);
 
-      // Tingkatkan material visual
+      // Tingkatkan kecerahan material
       model.traverse(node => {
         if (node.isMesh && node.material) {
           const mats = Array.isArray(node.material) ? node.material : [node.material];
-          mats.forEach(mat => {
-            if (mat.isMeshStandardMaterial || mat.isMeshPhysicalMaterial) {
-              mat.metalness = 0.0;
-              mat.roughness = 0.55;
+          mats.forEach(m => {
+            if (m.isMeshStandardMaterial || m.isMeshPhysicalMaterial) {
+              m.roughness = 0.5;
+              m.metalness = 0.0;
             }
           });
         }
       });
 
-      ARState.previewModel = wrapper;
-      ARState.previewScene.add(wrapper);
+      ARState.previewModel = group;
+      ARState.previewScene.add(group);
+      applyModelRotation();
     },
     undefined,
-    err => {
-      console.warn("Gagal memuat preview model 3D:", err);
-    }
+    err => console.warn("Model preview load error:", err)
   );
 }
 
-// ── Audio (AR-13) ─────────────────────────────────────────────────────────
-function toggleAudio() {
-  ARState.isAudioPlaying ? stopAudio() : playCurrentAnimalAudio();
-}
+// ── Interaksi Drag & Touch pada Model 3D Studio ────────────────────────────
+function attachPreviewInteraction() {
+  const canvas = document.getElementById("preview-3d-canvas");
+  if (!canvas || ARState.previewInteract) return;
 
-function playCurrentAnimalAudio() {
-  if (!ARState.activeAnimalId) return;
-  const data = satwaData[ARState.activeAnimalId];
-  if (!data) return;
+  const s = { dragging: false, lastX: 0, lastY: 0 };
+  ARState.previewInteract = s;
 
-  ARState.isAudioPlaying = true;
-  updateAudioButtonState(true);
-
-  if (data.audio) {
-    if (!ARState.audioElement) ARState.audioElement = new Audio();
-    ARState.audioElement.src = data.audio;
-    ARState.audioElement.play()
-      .then(() => { ARState.audioElement.onended = stopAudio; })
-      .catch(() => playSpeechNarration(data.narration));
-  } else {
-    playSpeechNarration(data.narration);
-  }
-}
-
-function playSpeechNarration(text) {
-  if (!window.speechSynthesis) return;
-  window.speechSynthesis.cancel();
-  const utt = new SpeechSynthesisUtterance(text);
-  utt.lang  = "id-ID";
-  utt.rate  = 0.95;
-  utt.pitch = 1.05;
-  utt.onend = utt.onerror = stopAudio;
-  ARState.currentUtterance = utt;
-  window.speechSynthesis.speak(utt);
-}
-
-function stopAudio() {
-  ARState.isAudioPlaying = false;
-  if (ARState.audioElement) {
-    ARState.audioElement.pause();
-    ARState.audioElement.currentTime = 0;
-  }
-  if (window.speechSynthesis) window.speechSynthesis.cancel();
-  updateAudioButtonState(false);
-}
-
-function updateAudioButtonState(playing) {
-  const btn = document.getElementById("btn-audio");
-  if (!btn) return;
-  btn.innerHTML = playing ? "⏸ Hentikan Suara" : "🔊 Putar Penjelasan Suara";
-  btn.classList.toggle("playing", playing);
-}
-
-function resetAudioButton() { updateAudioButtonState(false); }
-
-// ── Akhiri Sesi (AR-17) ───────────────────────────────────────────────────
-function endSession() {
-  clearDetectionTimeout();
-  stopAudio();
-
-  ARState.isScanning     = false;
-  ARState.activeAnimalId = null;
-
-  // Hentikan semua track kamera
-  document.querySelectorAll("video").forEach(v => {
-    if (v.srcObject) {
-      v.srcObject.getTracks().forEach(t => t.stop());
-      v.srcObject = null;
-    }
-    v.remove();
+  canvas.addEventListener("pointerdown", e => {
+    s.dragging = true;
+    s.lastX = e.clientX;
+    s.lastY = e.clientY;
   });
 
-  // Kosongkan scene AR
-  const container = document.getElementById("ar-scene-container");
-  if (container) container.innerHTML = "";
+  window.addEventListener("pointermove", e => {
+    if (!s.dragging || !ARState.previewModel) return;
+    const dx = e.clientX - s.lastX;
+    const dy = e.clientY - s.lastY;
+    ARState.previewAngle.y += dx * 0.008;
+    ARState.previewAngle.x += dy * 0.008;
+    applyModelRotation();
+    s.lastX = e.clientX;
+    s.lastY = e.clientY;
+  });
 
-  // Kembali ke landing
-  document.getElementById("ar-screen").classList.add("hidden");
-  document.getElementById("sidebar-idle").classList.remove("hidden");
-  document.getElementById("sidebar-active").classList.add("hidden");
-  document.getElementById("error-screen").classList.add("hidden");
-  document.getElementById("landing-screen").classList.remove("hidden");
+  window.addEventListener("pointerup", () => {
+    s.dragging = false;
+  });
+}
+
+function applyModelRotation() {
+  if (!ARState.previewModel) return;
+  ARState.previewModel.rotation.set(ARState.previewAngle.x, ARState.previewAngle.y, 0);
 }
 
 // ── Modal Kartu Marker ────────────────────────────────────────────────────

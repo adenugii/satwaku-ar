@@ -33,7 +33,7 @@
 
 ## 2. Target Animals (12 Registered Markers)
 
-The application introduces 12 Indonesian wildlife species representing different regions of Indonesia.
+The application introduces 12 generic animals (hewan umum) — model 3D saat ini bersifat generik dari direktori `assets/models/poly/` karena model spesies Indonesia masih terbatas.
 
 Each animal must have:
 - One registered AR marker.
@@ -42,75 +42,22 @@ Each animal must have:
 - Educational metadata.
 - A unique educational fact.
 
-### Sumatra
+### Daftar Hewan Umum (Slots & Marker ID)
 
-**1. Gajah Sumatera**
-- Scientific Name: *Elephas maximus sumatranus*
-- Region: Sumatra
-- Marker ID: 0
+1. **Gajah** — `animal_01` — Marker 0 — (model: `assets/models/poly/Elephant.glb`)
+2. **Badak** — `animal_02` — Marker 1 — (model: `assets/models/poly/Rhino.glb`)
+3. **Singa** — `animal_03` — Marker 2 — (model: `assets/models/poly/Lion.glb`)
+4. **Macan** — `animal_04` — Marker 3 — (model: `assets/models/poly/Tiger.glb`)
+5. **Zebra** — `animal_05` — Marker 4 — (model: `assets/models/poly/Zebra.glb`)
+6. **Kapibara** — `animal_06` — Marker 5 — (model: `assets/models/poly/Capybara.glb`)
+7. **Kura-kura** — `animal_07` — Marker 6 — (model: `assets/models/poly/Turtle.glb`)
+8. **Kadal** — `animal_08` — Marker 7 — (model: `assets/models/poly/Lizard.glb`)
+9. **Ular** — `animal_09` — Marker 8 — (model: `assets/models/poly/Snake.glb`)
+10. **Burung** — `animal_10` — Marker 9 — (model: `assets/models/poly/Bird.glb`)
+11. **Ikan** — `animal_11` — Marker 10 — (model: `assets/models/poly/Fish.glb`)
+12. **Lumba-lumba** — `animal_12` — Marker 11 — (model: `assets/models/poly/Dolphin.glb`)
 
-**2. Badak Sumatera**
-- Scientific Name: *Dicerorhinus sumatrensis*
-- Region: Sumatra
-- Marker ID: 1
-
-**3. Orangutan Sumatera**
-- Scientific Name: *Pongo abelii*
-- Region: Sumatra
-- Marker ID: 2
-
-**4. Harimau Sumatera**
-- Scientific Name: *Panthera tigris sumatrae*
-- Region: Sumatra
-- Marker ID: 3
-
-### Java and Bali
-
-**5. Badak Jawa**
-- Scientific Name: *Rhinoceros sondaicus*
-- Region: Java
-- Marker ID: 4
-
-**6. Macan Tutul Jawa**
-- Scientific Name: *Panthera pardus melas*
-- Region: Java
-- Marker ID: 5
-
-**7. Jalak Bali**
-- Scientific Name: *Leucopsar rothschildi*
-- Region: Bali
-- Marker ID: 6
-
-### Kalimantan
-
-**8. Orangutan Kalimantan**
-- Scientific Name: *Pongo pygmaeus*
-- Region: Kalimantan
-- Marker ID: 7
-
-**9. Bekantan**
-- Scientific Name: *Nasalis larvatus*
-- Region: Kalimantan
-- Marker ID: 8
-
-### Sulawesi
-
-**10. Anoa Dataran Rendah**
-- Scientific Name: *Bubalus depressicornis*
-- Region: Sulawesi
-- Marker ID: 9
-
-**11. Babirusa Sulawesi**
-- Scientific Name: *Babyrousa celebensis*
-- Region: Sulawesi
-- Marker ID: 10
-
-**12. Tarsius Sulawesi**
-- Scientific Name: *Tarsius tarsier*
-- Region: Sulawesi
-- Marker ID: 11
-
-**Note:** Conservation status must be verified using reliable and up-to-date sources, such as the IUCN Red List and relevant Indonesian conservation authorities. Do not assume every listed species has the same conservation status.
+**Note:** animal data is centrally managed through `js/satwa-data.js` and marker IDs must stay consistent with the profiles (barcode 0–11).
 
 ---
 
