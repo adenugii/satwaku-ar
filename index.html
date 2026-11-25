@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, shrink-to-fit=no" />
+  <meta name="theme-color" content="#14532d" />
+  <title>SatwaKu AR – Kebun Binatang Virtual</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+  <script src="js/satwa-data.js"></script>
+  <script src="js/ar-controller.js"></script>
+</head>
+<body>
+
+<!-- ============================================================
+     LANDING SCREEN (full-screen)
+     ============================================================ -->
+<div id="landing-screen" class="screen-overlay">
+  <!-- Dekorasi latar -->
+  <div class="zoo-bg-deco">
+    <span class="leaf leaf-1">🌿</span>
+    <span class="leaf leaf-2">🌴</span>
+    <span class="leaf leaf-3">🍃</span>
+    <span class="leaf leaf-4">🌿</span>
+    <span class="leaf leaf-5">🦋</span>
+  </div>
+
+  <div class="landing-wrapper">
+    <!-- Logo & judul -->
+    <div class="landing-hero">
+      <div class="logo-ring">🐾</div>
+      <div class="landing-badge">🌿 WebAR Edukasi Anak</div>
+      <h1 class="app-title">SatwaKu <span class="title-accent">AR</span></h1>
+      <p class="app-subtitle">Jelajahi dunia satwa langka Indonesia dengan Augmented Reality! Scan kartu & temukan 12 hewan menakjubkan!</p>
+    </div>
+
+    <!-- Kartu petunjuk -->
+    <div class="instructions-box">
+      <div class="instructions-header">📖 Cara Bermain:</div>
+      <div class="step-item"><div class="step-num">1</div><div>Tekan <b>Mulai AR</b> dan izinkan akses kamera.</div></div>
+      <div class="step-item"><div class="step-num">2</div><div>Arahkan ke <b>Kartu Satwa</b>, jarak 20–30 cm.</div></div>
+      <div class="step-item"><div class="step-num">3</div><div>Satwa 3D muncul! Pelajari & dengar suaranya.</div></div>
+    </div>
+
+    <!-- Galeri satwa mini -->
+    <div class="animal-preview-row">
+      <div class="animal-chip">🐘 Gajah</div>
+      <div class="animal-chip">🦏 Badak</div>
+      <div class="animal-chip">🦁 Harimau</div>
+      <div class="animal-chip">🦧 Orangutan</div>
+      <div class="animal-chip">🦜 Jalak Bali</div>
+      <div class="animal-chip">🐒 Tarsius</div>
+    </div>
+
+    <!-- Tombol aksi -->
+    <div class="btn-group">
+      <button class="btn btn-start" onclick="startAR()">
+        <span class="btn-icon">🚀</span>
+        <span>Mulai AR Sekarang</span>
+      </button>
+      <button class="btn btn-secondary" onclick="openMarkerCardsModal()">
+        <span class="btn-icon">🎴</span>
+        <span>Lihat Kartu Marker</span>
+      </button>
+    </div>
+
+    <!-- Footer badge -->
+    <div class="landing-footer">
+      🌏 12 Satwa Langka Indonesia &nbsp;•&nbsp; 🎓 Edukasi Ramah Anak
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     ERROR SCREEN (full-screen)
+     ============================================================ -->
+<div id="error-screen" class="screen-overlay hidden">
+  <div class="landing-wrapper">
+    <div class="landing-hero">
+      <div class="logo-ring" style="background:rgba(239,68,68,0.15); border-color:rgba(239,68,68,0.4);">⚠️</div>
+      <h2 class="app-title" style="color:#fca5a5; font-size:1.6rem;">Kamera Tidak Aktif</h2>
+      <p id="error-msg" class="app-subtitle">Izin kamera ditolak. Pastikan kamera diizinkan di pengaturan browser.</p>
+    </div>
+    <div class="btn-group">
+      <button class="btn btn-start" onclick="startAR()">🔄 Coba Lagi</button>
+      <button class="btn btn-secondary" onclick="endSession()">⬅ Kembali</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     AR SESSION SCREEN – layout split 2 panel
+     ============================================================ -->
+<div id="ar-screen" class="hidden">
+
+  <!-- Panel kiri: Viewport AR (kamera) -->
+  <div id="ar-viewport">
+    <!-- AR scene diinjeksi ke sini oleh startAR() -->
+    <div id="ar-scene-container"></div>
+
+    <!-- Overlay atas AR viewport -->
+    <div id="ar-topbar">
+      <div class="app-pill">🐾 SatwaKu AR</div>
+      <button class="btn btn-back" onclick="endSession()">✕ Akhiri</button>
+    </div>
+
+    <!-- Hint scan di bawah viewport -->
+    <div id="scan-hint" class="scan-hint-bar">
+      🔍 Arahkan ke kartu satwa...
+    </div>
+  </div>
+
+  <!-- Panel kanan: Info + preview 3D + statistik -->
+  <div id="info-sidebar">
+
+    <!-- State: belum ada satwa terdeteksi -->
+    <div id="sidebar-idle">
+      <div class="idle-icon">🦒</div>
+      <h3 class="idle-title">Belum Ada Satwa</h3>
+      <p class="idle-desc">Scan salah satu kartu satwa untuk melihat informasinya di sini.</p>
+      <div class="idle-tips">
+        <div class="tip-row">📏 Jarak ideal: <b>20–30 cm</b></div>
+        <div class="tip-row">💡 Pastikan <b>pencahayaan cukup</b></div>
+        <div class="tip-row">📐 Kartu harus <b>rata & tidak melengkung</b></div>
+      </div>
+      <!-- Galeri pilih satwa untuk preview 3D -->
+      <div class="animal-gallery-label">👇 Pilih satwa untuk preview 3D:</div>
+      <div class="animal-gallery" id="animal-gallery"></div>
+    </div>
+
+    <!-- State: satwa terdeteksi -->
+    <div id="sidebar-active" class="hidden">
+      <!-- Header satwa -->
+      <div class="satwa-header">
+        <div class="satwa-emoji" id="satwa-emoji">🐾</div>
+        <div class="satwa-titles">
+          <h2 id="satwa-name">Nama Satwa</h2>
+          <div id="satwa-latin">Nama Ilmiah</div>
+        </div>
+        <span id="satwa-badge" class="status-badge badge-endangered">Status</span>
+      </div>
+
+      <!-- Preview 3D Interaktif -->
+      <div id="preview-3d-container">
+        <div class="preview-label">👆 Model 3D Satwa</div>
+        <canvas id="preview-3d-canvas"></canvas>
+      </div>
+
+      <!-- Info detail satwa -->
+      <div class="info-scroll">
+        <div class="region-tag" id="satwa-region-tag">📍 Region</div>
+
+        <div class="info-cards-grid">
+          <div class="info-card">
+            <div class="info-card-icon">🏕️</div>
+            <div class="info-card-label">Habitat</div>
+            <div class="info-card-value" id="satwa-habitat">-</div>
+          </div>
+          <div class="info-card">
+            <div class="info-card-icon">🍃</div>
+            <div class="info-card-label">Diet</div>
+            <div class="info-card-value" id="satwa-food">-</div>
+          </div>
+        </div>
+
+        <div class="status-card" id="satwa-status-card">
+          <div class="status-card-label">🛡️ Status Konservasi</div>
+          <div class="status-card-value" id="satwa-status">-</div>
+        </div>
+
+        <div class="fact-box">
+          <div class="fact-title">✨ Fakta Unik!</div>
+          <div id="satwa-fact" class="fact-text">-</div>
+        </div>
+
+        <!-- Tombol audio -->
+        <button id="btn-audio" class="btn-audio" onclick="toggleAudio()">
+          🔊 Putar Penjelasan Suara
+        </button>
+      </div>
+    </div>
+
+  </div><!-- /info-sidebar -->
+
+</div><!-- /ar-screen -->
+
+<!-- ============================================================
+     MODAL KARTU MARKER
+     ============================================================ -->
+<div id="marker-modal" class="modal-overlay hidden">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>🎴 Kartu Marker SatwaKu AR</h3>
+      <button class="modal-close" onclick="closeMarkerCardsModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p class="modal-desc">Cetak atau tampilkan kartu berikut, lalu scan dengan kamera AR:</p>
+      <div style="text-align:center; margin-bottom:14px;">
+        <a href="cards.html" target="_blank" class="btn btn-start" style="padding:10px 20px; font-size:0.9rem; text-decoration:none; display:inline-flex;">
+          📄 Buka Kartu Siap Cetak (A4)
+        </a>
+      </div>
+      <div class="cards-grid">
+        <div class="marker-card-item">
+          <h4>1. Gajah Sumatera</h4>
+          <span>ID: 0</span>
+          <div class="marker-img-wrapper"><img src="assets/markers/hamming/0.png" alt="Marker 0" /></div>
+        </div>
+        <div class="marker-card-item">
+          <h4>2. Badak Sumatera</h4>
+          <span>ID: 1</span>
+          <div class="marker-img-wrapper"><img src="assets/markers/hamming/1.png" alt="Marker 1" /></div>
+        </div>
+        <div class="marker-card-item">
+          <h4>3. Orangutan Sumatera</h4>
+          <span>ID: 2</span>
+          <div class="marker-img-wrapper"><img src="assets/markers/hamming/2.png" alt="Marker 2" /></div>
+        </div>
+        <div class="marker-card-item">
+          <h4>4. Harimau Sumatera</h4>
+          <span>ID: 3</span>
+          <div class="marker-img-wrapper"><img src="assets/markers/hamming/3.png" alt="Marker 3" /></div>
+        </div>
+        <div class="marker-card-item">
+          <h4>5. Badak Jawa</h4>
+          <span>ID: 4</span>
+          <div class="marker-img-wrapper"><img src="assets/markers/hamming/4.png" alt="Marker 4" /></div>
+        </div>
+        <div class="marker-card-item">
+          <h4>6. Macan Tutul Jawa</h4>
+          <span>ID: 5</span>
+          <div class="marker-img-wrapper"><img src="assets/markers/hamming/5.png" alt="Marker 5" /></div>
+        </div>
+        <div class="marker-card-item">
+          <h4>7. Jalak Bali</h4>
+          <span>ID: 6</span>
+          <div class="marker-img-wrapper"><img src="assets/markers/3x3/6.png" alt="Marker 6" /></div>
+        </div>
+        <div class="marker-card-item">
+          <h4>8. Orangutan Kalimantan</h4>
+          <span>ID: 7</span>
+          <div class="marker-img-wrapper"><img src="assets/markers/3x3/7.png" alt="Marker 7" /></div>
+        </div>
+        <div class="marker-card-item">
+          <h4>9. Bekantan</h4>
+          <span>ID: 8</span>
+          <div class="marker-img-wrapper"><img src="assets/markers/3x3/8.png" alt="Marker 8" /></div>
+        </div>
+        <div class="marker-card-item">
+          <h4>10. Anoa Dataran Rendah</h4>
+          <span>ID: 9</span>
+          <div class="marker-img-wrapper"><img src="assets/markers/3x3/9.png" alt="Marker 9" /></div>
+        </div>
+        <div class="marker-card-item">
+          <h4>11. Babirusa Sulawesi</h4>
+          <span>ID: 10</span>
+          <div class="marker-img-wrapper"><img src="assets/markers/3x3/10.png" alt="Marker 10" /></div>
+        </div>
+        <div class="marker-card-item">
+          <h4>12. Tarsius Sulawesi</h4>
+          <span>ID: 11</span>
+          <div class="marker-img-wrapper"><img src="assets/markers/3x3/11.png" alt="Marker 11" /></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     TEMPLATE AR SCENE (diinjeksi saat startAR dipanggil)
+     ============================================================ -->
+<template id="ar-scene-template">
+  <a-scene
+    embedded
+    vr-mode-ui="enabled: false"
+    renderer="colorManagement: true; antialias: true; alpha: true; precision: medium;"
+    arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3_HAMMING63;"
+  >
+    <a-entity light="type: ambient; color: #ffffff; intensity: 0.5"></a-entity>
+    <a-entity light="type: hemisphere; color: #f0f9ff; groundColor: #384238; intensity: 0.9"></a-entity>
+    <a-entity light="type: directional; color: #fffdf5; intensity: 1.6; position: 2 5 3"></a-entity>
+    <a-entity light="type: directional; color: #e0f2fe; intensity: 0.8; position: -3 3 -1"></a-entity>
+    <a-entity light="type: directional; color: #ffffff; intensity: 1.1; position: 0 4 -3"></a-entity>
+
+    <a-assets timeout="10000">
+      <a-asset-item id="model-gajah"              src="assets/models/gajah_sumatera.glb"></a-asset-item>
+      <a-asset-item id="model-badak-sumatera"      src="assets/models/badak_sumatera.glb"></a-asset-item>
+      <a-asset-item id="model-orangutan"           src="assets/models/orangutan_sumatera.glb"></a-asset-item>
+      <a-asset-item id="model-harimau"             src="assets/models/harimau_sumatera.glb"></a-asset-item>
+      <a-asset-item id="model-badak-jawa"          src="assets/models/badak_jawa.glb"></a-asset-item>
+      <a-asset-item id="model-macan"               src="assets/models/macan_tutul_jawa.glb"></a-asset-item>
+      <a-asset-item id="model-jalak"               src="assets/models/jalak_bali.glb"></a-asset-item>
+      <a-asset-item id="model-orangutan-kalimantan" src="assets/models/orangutan_kalimantan.glb"></a-asset-item>
+      <a-asset-item id="model-bekantan"            src="assets/models/bekantan.glb"></a-asset-item>
+      <a-asset-item id="model-anoa"                src="assets/models/anoa.glb"></a-asset-item>
+      <a-asset-item id="model-babirusa"            src="assets/models/babirusa.glb"></a-asset-item>
+      <a-asset-item id="model-tarsius"             src="assets/models/tarsius.glb"></a-asset-item>
+    </a-assets>
+
+    <!-- Markers (0–11) -->
+    <a-marker type="barcode" value="0"  id="marker-gajah"               data-satwa-id="gajah_sumatera"       smooth="true" smoothCount="5" smoothTolerance="0.01" smoothThreshold="2">
+      <a-entity gltf-model="#model-gajah"               satwa-model-enhancer position="0 0 0"    scale="0.20 0.20 0.20"   animation="property:rotation;to:0 360 0;loop:true;dur:22000;easing:linear"></a-entity>
+    </a-marker>
+    <a-marker type="barcode" value="1"  id="marker-badak-sumatera"       data-satwa-id="badak_sumatera"       smooth="true" smoothCount="5" smoothTolerance="0.01" smoothThreshold="2">
+      <a-entity gltf-model="#model-badak-sumatera"      satwa-model-enhancer position="0 0.55 0" scale="0.24 0.24 0.24"   animation="property:rotation;to:0 360 0;loop:true;dur:22000;easing:linear"></a-entity>
+    </a-marker>
+    <a-marker type="barcode" value="2"  id="marker-orangutan"            data-satwa-id="orangutan_sumatera"   smooth="true" smoothCount="5" smoothTolerance="0.01" smoothThreshold="2">
+      <a-entity gltf-model="#model-orangutan"           satwa-model-enhancer position="0 0.70 0" scale="0.10 0.10 0.10"   animation="property:rotation;to:0 360 0;loop:true;dur:22000;easing:linear"></a-entity>
+    </a-marker>
+    <a-marker type="barcode" value="3"  id="marker-harimau"              data-satwa-id="harimau_sumatera"     smooth="true" smoothCount="5" smoothTolerance="0.01" smoothThreshold="2">
+      <a-entity gltf-model="#model-harimau"             satwa-model-enhancer position="0 0.62 0" scale="0.010 0.010 0.010" animation="property:rotation;to:0 360 0;loop:true;dur:22000;easing:linear"></a-entity>
+    </a-marker>
+    <a-marker type="barcode" value="4"  id="marker-badak-jawa"           data-satwa-id="badak_jawa"           smooth="true" smoothCount="5" smoothTolerance="0.01" smoothThreshold="2">
+      <a-entity gltf-model="#model-badak-jawa"          satwa-model-enhancer position="0 0.55 0" scale="0.24 0.24 0.24"   animation="property:rotation;to:0 360 0;loop:true;dur:22000;easing:linear"></a-entity>
+    </a-marker>
+    <a-marker type="barcode" value="5"  id="marker-macan"                data-satwa-id="macan_tutul_jawa"     smooth="true" smoothCount="5" smoothTolerance="0.01" smoothThreshold="2">
+      <a-entity gltf-model="#model-macan"               satwa-model-enhancer position="0 0.70 0" scale="0.015 0.015 0.015" animation="property:rotation;to:0 360 0;loop:true;dur:22000;easing:linear"></a-entity>
+    </a-marker>
+    <a-marker type="barcode" value="6"  id="marker-jalak"                data-satwa-id="jalak_bali"           smooth="true" smoothCount="5" smoothTolerance="0.01" smoothThreshold="2">
+      <a-entity gltf-model="#model-jalak"               satwa-model-enhancer position="0 0.10 0" scale="0.20 0.20 0.20"   animation="property:rotation;to:0 360 0;loop:true;dur:22000;easing:linear"></a-entity>
+    </a-marker>
+    <a-marker type="barcode" value="7"  id="marker-orangutan-kalimantan" data-satwa-id="orangutan_kalimantan" smooth="true" smoothCount="5" smoothTolerance="0.01" smoothThreshold="2">
+      <a-entity gltf-model="#model-orangutan-kalimantan" satwa-model-enhancer position="0 0.70 0" scale="0.10 0.10 0.10"   animation="property:rotation;to:0 360 0;loop:true;dur:22000;easing:linear"></a-entity>
+    </a-marker>
+    <a-marker type="barcode" value="8"  id="marker-bekantan"             data-satwa-id="bekantan"             smooth="true" smoothCount="5" smoothTolerance="0.01" smoothThreshold="2">
+      <a-entity gltf-model="#model-bekantan"            satwa-model-enhancer position="0 0.80 0" scale="0.25 0.25 0.25"   animation="property:rotation;to:0 360 0;loop:true;dur:22000;easing:linear"></a-entity>
+    </a-marker>
+    <a-marker type="barcode" value="9"  id="marker-anoa"                 data-satwa-id="anoa"                 smooth="true" smoothCount="5" smoothTolerance="0.01" smoothThreshold="2">
+      <a-entity gltf-model="#model-anoa"                satwa-model-enhancer position="0 0.50 0" scale="0.20 0.20 0.20"   animation="property:rotation;to:0 360 0;loop:true;dur:22000;easing:linear"></a-entity>
+    </a-marker>
+    <a-marker type="barcode" value="10" id="marker-babirusa"             data-satwa-id="babirusa"             smooth="true" smoothCount="5" smoothTolerance="0.01" smoothThreshold="2">
+      <a-entity gltf-model="#model-babirusa"            satwa-model-enhancer position="0 0.50 0" scale="0.20 0.20 0.20"   animation="property:rotation;to:0 360 0;loop:true;dur:22000;easing:linear"></a-entity>
+    </a-marker>
+    <a-marker type="barcode" value="11" id="marker-tarsius"              data-satwa-id="tarsius"              smooth="true" smoothCount="5" smoothTolerance="0.01" smoothThreshold="2">
+      <a-entity gltf-model="#model-tarsius"             satwa-model-enhancer position="0 0.20 0" scale="0.05 0.05 0.05"   animation="property:rotation;to:0 360 0;loop:true;dur:22000;easing:linear"></a-entity>
+    </a-marker>
+
+    <!-- Fallback Hiro -->
+    <a-marker preset="hiro" id="marker-hiro" data-satwa-id="jalak_bali" smooth="true">
+      <a-entity gltf-model="#model-jalak" satwa-model-enhancer position="0 0.10 0" scale="0.20 0.20 0.20" animation="property:rotation;to:0 360 0;loop:true;dur:22000;easing:linear"></a-entity>
+    </a-marker>
+
+    <a-entity camera></a-entity>
+  </a-scene>
+</template>
+
+</body>
+</html>

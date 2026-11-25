@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kartu Edukasi Flashcard - SatwaKu AR</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    body {
+      background-color: #f3f4f6;
+      color: #1f2937;
+      padding: 24px;
+    }
+
+    .header-bar {
+      max-width: 960px;
+      margin: 0 auto 24px auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      background: #064e3b;
+      color: #fff;
+      padding: 16px 24px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .header-title h1 {
+      font-size: 1.5rem;
+      color: #6ee7b7;
+    }
+
+    .header-title p {
+      font-size: 0.85rem;
+      color: #d1fae5;
+    }
+
+    .btn-action {
+      background: #10b981;
+      color: #022c22;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-action:hover {
+      background: #34d399;
+    }
+
+    .flashcards-container {
+      max-width: 960px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: #ffffff;
+      border: 2px solid #e5e7eb;
+      border-radius: 18px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+      page-break-inside: avoid;
+      position: relative;
+    }
+
+    .card-top-tag {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      background: #ecfdf5;
+      color: #059669;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 4px 8px;
+      border-radius: 6px;
+      border: 1px solid #a7f3d0;
+    }
+
+    .card-id-badge {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: #f3f4f6;
+      color: #374151;
+      font-size: 0.72rem;
+      font-weight: 750;
+      padding: 4px 8px;
+      border-radius: 6px;
+      border: 1px solid #d1d5db;
+    }
+
+    .card-animal-name {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #064e3b;
+      margin-top: 24px;
+    }
+
+    .card-latin-name {
+      font-size: 0.85rem;
+      font-style: italic;
+      color: #6b7280;
+      margin-bottom: 14px;
+    }
+
+    .marker-frame {
+      background: #ffffff;
+      padding: 14px;
+      border: 1px solid #f3f4f6;
+      border-radius: 16px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    }
+
+    .marker-frame img {
+      width: 220px;
+      height: 220px;
+      image-rendering: pixelated;
+      display: block;
+    }
+
+    .status-pill {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 50px;
+      margin-bottom: 10px;
+    }
+
+    .status-endangered {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .status-critical {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .card-fact {
+      font-size: 0.8rem;
+      color: #4b5563;
+      line-height: 1.4;
+      background: #f9fafb;
+      padding: 8px 12px;
+      border-radius: 8px;
+      margin-top: auto;
+      width: 100%;
+    }
+
+    /* Print styles for A4 sheet */
+    @media print {
+      body {
+        background: transparent;
+        padding: 0;
+      }
+      .header-bar {
+        display: none;
+      }
+      .flashcards-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+      }
+      .card {
+        box-shadow: none;
+        border: 1.5px solid #6b7280;
+        padding: 14px;
+      }
+      .marker-frame img {
+        width: 150px;
+        height: 150px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header-bar">
+    <div class="header-title">
+      <h1>🎴 Kartu Edukasi Flashcard - SatwaKu AR</h1>
+      <p>Arahkan kamera aplikasi SatwaKu AR ke kotak marker pada setiap kartu untuk memunculkan satwa 3D.</p>
+    </div>
+    <div style="display: flex; gap: 10px;">
+      <button class="btn-action" onclick="window.print()">🖨️ Cetak Kartu (A4)</button>
+      <a href="index.html" class="btn-action" style="background:#f3f4f6; color:#111827;">📱 Buka Aplikasi AR</a>
+    </div>
+  </div>
+
+  <div class="flashcards-container">
+
+    <!-- Card 1: Gajah Sumatera -->
+    <div class="card">
+      <div class="card-top-tag">SatwaKu AR</div>
+      <div class="card-id-badge">ID: 0</div>
+      <h2 class="card-animal-name">Gajah Sumatera</h2>
+      <div class="card-latin-name">Elephas maximus sumatranus</div>
+      <div class="marker-frame">
+        <img src="assets/markers/hamming/0.png" alt="Marker Barcode 0 - Gajah Sumatera" />
+      </div>
+      <div class="status-pill status-critical">Kritis (Critically Endangered)</div>
+      <div class="card-fact">
+        ✨ <b>Fakta:</b> Mamalia darat terbesar di Indonesia! Memiliki kecerdasan tinggi, daya ingat luar biasa, dan belalai serbaguna.
+      </div>
+    </div>
+
+    <!-- Card 2: Beruang Madu -->
+    <div class="card">
+      <div class="card-top-tag">SatwaKu AR</div>
+      <div class="card-id-badge">ID: 1</div>
+      <h2 class="card-animal-name">Beruang Madu</h2>
+      <div class="card-latin-name">Helarctos malayanus</div>
+      <div class="marker-frame">
+        <img src="assets/markers/hamming/1.png" alt="Marker Barcode 1 - Beruang Madu" />
+      </div>
+      <div class="status-pill status-endangered">Rentan (Vulnerable)</div>
+      <div class="card-fact">
+        ✨ <b>Fakta:</b> Spesies beruang terkecil di dunia! Memiliki lidah mencapai 25 cm dan corak khas berbentuk matahari terbit di dadanya.
+      </div>
+    </div>
+
+    <!-- Card 3: Badak Jawa -->
+    <div class="card">
+      <div class="card-top-tag">SatwaKu AR</div>
+      <div class="card-id-badge">ID: 2</div>
+      <h2 class="card-animal-name">Badak Jawa</h2>
+      <div class="card-latin-name">Rhinoceros sondaicus</div>
+      <div class="marker-frame">
+        <img src="assets/markers/hamming/2.png" alt="Marker Barcode 2 - Badak Jawa" />
+      </div>
+      <div class="status-pill status-critical">Kritis (Critically Endangered)</div>
+      <div class="card-fact">
+        ✨ <b>Fakta:</b> Memiliki satu cula dan hanya hidup di TN Ujung Kulon. Salah satu mamalia darat paling langka di bumi (< 80 ekor tersisa).
+      </div>
+    </div>
+
+    <!-- Card 4: Harimau Sumatera -->
+    <div class="card">
+      <div class="card-top-tag">SatwaKu AR</div>
+      <div class="card-id-badge">ID: 3</div>
+      <h2 class="card-animal-name">Harimau Sumatera</h2>
+      <div class="card-latin-name">Panthera tigris sumatrae</div>
+      <div class="marker-frame">
+        <img src="assets/markers/hamming/3.png" alt="Marker Barcode 3 - Harimau Sumatera" />
+      </div>
+      <div class="status-pill status-critical">Kritis (Critically Endangered)</div>
+      <div class="card-fact">
+        ✨ <b>Fakta:</b> Harimau terakhir yang tersisa di Indonesia. Memiliki loreng paling rapat dan warna oranye paling pekat di dunia.
+      </div>
+    </div>
+
+    <!-- Card 5: Banteng Jawa -->
+    <div class="card">
+      <div class="card-top-tag">SatwaKu AR</div>
+      <div class="card-id-badge">ID: 4</div>
+      <h2 class="card-animal-name">Banteng Jawa</h2>
+      <div class="card-latin-name">Bos javanicus</div>
+      <div class="marker-frame">
+        <img src="assets/markers/hamming/4.png" alt="Marker Barcode 4 - Banteng Jawa" />
+      </div>
+      <div class="status-pill status-endangered">Terancam Punah (Endangered)</div>
+      <div class="card-fact">
+        ✨ <b>Fakta:</b> Leluhur asli sapi Nusantara! Banteng jantan dewasa berwarna hitam legam dan memiliki tanduk melengkung kokoh yang gagah.
+      </div>
+    </div>
+
+    <!-- Card 6: Burung Makau / Nuri -->
+    <div class="card">
+      <div class="card-top-tag">SatwaKu AR</div>
+      <div class="card-id-badge">ID: 5</div>
+      <h2 class="card-animal-name">Burung Makau / Nuri</h2>
+      <div class="card-latin-name">Anodorhynchus hyacinthinus</div>
+      <div class="marker-frame">
+        <img src="assets/markers/hamming/5.png" alt="Marker Barcode 5 - Burung Makau" />
+      </div>
+      <div class="status-pill status-endangered">Rentan (Vulnerable)</div>
+      <div class="card-fact">
+        ✨ <b>Fakta:</b> Burung eksotis berbulu biru cerah dengan paruh lengkung luar biasa kuat yang sanggup memecahkan tempurung kelapa!
+      </div>
+    </div>
+
+    <!-- Bonus Card: Marker Hiro (Universal Test Marker) -->
+    <div class="card" style="border: 2px solid #10b981;">
+      <div class="card-top-tag" style="background:#d1fae5;">Marker Uji Coba Cepat</div>
+      <div class="card-id-badge" style="background:#ecfdf5; color:#065f46;">Hiro Preset</div>
+      <h2 class="card-animal-name">Marker Hiro (Tes Cepat)</h2>
+      <div class="card-latin-name">Burung Makau (Anodorhynchus)</div>
+      <div class="marker-frame" style="border-color:#10b981;">
+        <img src="assets/markers/hiro.png" alt="Marker Hiro AR.js" />
+      </div>
+      <div class="status-pill status-endangered">Preset Hiro Standar</div>
+      <div class="card-fact">
+        💡 <b>Tips:</b> Marker Hiro adalah marker standar AR.js yang langsung didukung tanpa konfigurasi khusus. Menampilkan model Burung Makau.
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
