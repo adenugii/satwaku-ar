@@ -26,7 +26,7 @@ const satwaData = {
     audio: "assets/audio/kucing.mp3",
     narration: "Halo sahabat cilik! Kenalkan, aku Kucing si hewan peliharaan yang lincah dan manja. Aku punya cakar lentur dan pendengaran yang sangat tajam. Sayangi dan rawat hewan peliharaanmu dengan penuh kasih sayang, ya!",
     model: "assets/models/poly/Cat.glb",
-    scale: "0.15 0.15 0.15",
+    scale: "0.050 0.050 0.050",
     accentColor: "#F59E0B"
   },
   animal_02: {
@@ -50,7 +50,7 @@ const satwaData = {
     audio: "assets/audio/anjing.mp3",
     narration: "Guk guk! Halo kawan baikku! Aku Anjing, sahabat manusia yang paling setia dan ceria. Hidungku sangat hebat untuk melacak jejak bau. Selalu jaga dan sayangi hewan di sekitarmu, ya!",
     model: "assets/models/poly/Dog.glb",
-    scale: "0.18 0.18 0.18",
+    scale: "0.0065 0.0065 0.0065",
     accentColor: "#3B82F6"
   },
   animal_03: {
@@ -74,7 +74,7 @@ const satwaData = {
     audio: "assets/audio/kelinci.mp3",
     narration: "Lompat, lompat! Hai adik-adik yang manis! Aku Kelinci yang berbulu lembut dan bertelinga panjang. Aku suka melompat gembira saat merasa senang. Jangan lupa beri makan dan sayangi aku selalu ya!",
     model: "assets/models/poly/Rabbit.glb",
-    scale: "0.15 0.15 0.15",
+    scale: "0.016 0.016 0.016",
     accentColor: "#EC4899"
   },
 
@@ -100,7 +100,7 @@ const satwaData = {
     audio: "assets/audio/sapi.mp3",
     narration: "Mooo! Halo anak-anak hebat! Aku Sapi, sahabat peternak yang menghasilkan susu segar dan bergizi untuk membuat tulang dan gigimu kuat. Ayo biasakan minum susu sehat setiap hari!",
     model: "assets/models/poly/Cow.glb",
-    scale: "0.18 0.18 0.18",
+    scale: "0.30 0.30 0.30",
     accentColor: "#10B981"
   },
   animal_05: {
@@ -124,7 +124,7 @@ const satwaData = {
     audio: "assets/audio/ayam.mp3",
     narration: "Kukuruyuk! Selamat pagi teman-teman kecil! Aku Ayam yang selalu berkokok riang menyambut matahari terbit. Telur dan dagingku kaya protein sehat untuk membantumu tumbuh cerdas dan kuat!",
     model: "assets/models/poly/Chicken.glb",
-    scale: "0.15 0.15 0.15",
+    scale: "0.024 0.024 0.024",
     accentColor: "#EF4444"
   },
   animal_06: {
@@ -148,7 +148,7 @@ const satwaData = {
     audio: "assets/audio/kambing.mp3",
     narration: "Mbeeek! Halo sahabat petualang! Aku Kambing si hewan ternak yang lincah dan suka memanjat. Susu kambing sangat menyehatkan tubuh dan mudah dicerna. Ayo rawat semua hewan ternak dengan baik!",
     model: "assets/models/poly/Goat.glb",
-    scale: "0.18 0.18 0.18",
+    scale: "0.55 0.55 0.55",
     accentColor: "#8B5CF6"
   },
   animal_07: {
@@ -172,7 +172,7 @@ const satwaData = {
     audio: "assets/audio/bebek.mp3",
     narration: "Kwek kwek kwek! Halo teman kecilku yang ceria! Aku Bebek si perenang handal. Buluku anti air, jadi aku tidak kedinginan saat berenang santai di danau atau sawah bersama kawan-kawanku!",
     model: "assets/models/poly/Duck.glb",
-    scale: "0.15 0.15 0.15",
+    scale: "1.00 1.00 1.00",
     accentColor: "#06B6D4"
   },
 
@@ -198,7 +198,7 @@ const satwaData = {
     audio: "assets/audio/gajah.mp3",
     narration: "Terompet berseru! Halo sahabat petualang cilik! Aku Gajah, hewan darat terbesar di bumi. Belalaiku sangat serbaguna untuk minum dan menyapa kawan. Mari kita jaga kelestarian hutan tempat tinggal kami, ya!",
     model: "assets/models/poly/Elephant.glb",
-    scale: "0.20 0.20 0.20",
+    scale: "0.36 0.36 0.36",
     accentColor: "#3B82F6"
   },
   animal_09: {
@@ -222,7 +222,7 @@ const satwaData = {
     audio: "assets/audio/singa.mp3",
     narration: "Auuuum! Halo anak pemberani! Aku Singa, si raja savana yang gagah perkasa. Surai lebat di leherku melindungiku saat menjaga keluarga kawanan kami. Jangan lupa dukung perlindungan satwa liar di alam bebas!",
     model: "assets/models/poly/Lion.glb",
-    scale: "0.18 0.18 0.18",
+    scale: "0.29 0.29 0.29",
     accentColor: "#D97706"
   },
   animal_10: {
@@ -246,7 +246,7 @@ const satwaData = {
     audio: "assets/audio/jerapah.mp3",
     narration: "Wah tinggi sekali! Halo sahabat cerdas! Aku Jerapah, hewan paling tinggi di seluruh dunia. Leher panjangku membantuku memetik daun termanis di puncak pohon. Alam ini indah, mari kita jaga bersama!",
     model: "assets/models/poly/Giraffe.glb",
-    scale: "0.18 0.18 0.18",
+    scale: "0.012 0.012 0.012",
     accentColor: "#FBBF24"
   },
   animal_11: {
@@ -270,7 +270,7 @@ const satwaData = {
     audio: "assets/audio/harimau.mp3",
     narration: "Grrrr! Halo kawan rimba! Aku Harimau loreng, kucing liar terbesar dan terkuat di dunia. Aku menjaga keseimbangan ekosistem hutan agar tetap sehat. Ayo lindungi hutan kita dari kepunahan!",
     model: "assets/models/poly/Tiger.glb",
-    scale: "0.15 0.15 0.15",
+    scale: "0.018 0.018 0.018",
     accentColor: "#EA580C"
   },
   animal_12: {
@@ -294,7 +294,7 @@ const satwaData = {
     audio: "assets/audio/monyet.mp3",
     narration: "U-u-a-a! Halo kawan cilik yang ceria! Aku Monyet si akrobat dahan pohon. Bersama kawananku, kami gemar melompat gembira dan memakan buah-buahan hutan. Rawat hutan dan sayangi satwa liar selalu ya!",
     model: "assets/models/poly/monkey.glb",
-    scale: "0.14 0.14 0.14",
+    scale: "0.50 0.50 0.50",
     accentColor: "#14B8A6"
   }
 };
