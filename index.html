@@ -17,7 +17,7 @@
   <script src="js/audio-effects.js"></script>
   <script src="js/ar-controller.js"></script>
 </head>
-<body>
+<body class="mobile-view-camera">
 
 <!-- ============================================================
      1. LANDING SCREEN (Petualangan Ceria Ramah Anak)
@@ -121,8 +121,21 @@
     </button>
   </header>
 
+  <!-- Mobile Segmented View Tabs (Hanya Muncul di Layar Mobile) -->
+  <nav id="mobile-view-tabs" class="mobile-tabs-bar">
+    <button class="mobile-tab-btn active" data-view="camera" onclick="switchMobileView('camera')">
+      📷 Kamera AR
+    </button>
+    <button class="mobile-tab-btn" data-view="studio" onclick="switchMobileView('studio')">
+      🎮 Model 3D
+    </button>
+    <button class="mobile-tab-btn" data-view="info" onclick="switchMobileView('info')">
+      📖 Info Satwa
+    </button>
+  </nav>
+
   <!-- Main 3-Column Studio Workspace -->
-  <main id="ar-workspace">
+  <main id="ar-workspace" class="view-camera">
 
     <!-- ────────────────────────────────────────────────────────
          KOLOM 1 (KIRI): Mini Studio 3D Interaktif
