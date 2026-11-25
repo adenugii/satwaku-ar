@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kartu Edukasi Flashcard - SatwaKu AR</title>
+  <title>Kartu Edukasi Flashcard (12 Satwa) - SatwaKu AR</title>
   <style>
     * {
       box-sizing: border-box;
@@ -63,17 +63,25 @@
       transition: all 0.1s;
     }
 
-    .btn-action:hover {
-      filter: brightness(1.05);
+    .btn-action:hover { filter: brightness(1.05); }
+    .btn-action:active { transform: translateY(2px); box-shadow: 0 2px 0 #D97706; }
+
+    .category-section-title {
+      max-width: 980px;
+      margin: 24px auto 12px auto;
+      font-size: 1.25rem;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
-    .btn-action:active {
-      transform: translateY(2px);
-      box-shadow: 0 2px 0 #D97706;
-    }
+    .title-pet { color: #D97706; }
+    .title-farm { color: #059669; }
+    .title-wild { color: #DC2626; }
 
     .flashcards-container {
       max-width: 980px;
-      margin: 0 auto;
+      margin: 0 auto 24px auto;
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 20px;
@@ -175,28 +183,12 @@
       text-align: left;
     }
 
-    /* Print styles */
     @media print {
-      body {
-        background: transparent;
-        padding: 0;
-      }
-      .header-bar {
-        display: none;
-      }
-      .flashcards-container {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 16px;
-      }
-      .card {
-        box-shadow: none;
-        border: 2px solid #CBD5E1;
-        padding: 14px;
-      }
-      .marker-frame img {
-        width: 140px;
-        height: 140px;
-      }
+      body { background: transparent; padding: 0; }
+      .header-bar { display: none; }
+      .flashcards-container { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+      .card { box-shadow: none; border: 2px solid #CBD5E1; padding: 14px; }
+      .marker-frame img { width: 140px; height: 140px; }
     }
   </style>
 </head>
@@ -205,7 +197,7 @@
   <div class="header-bar">
     <div class="header-title">
       <h1>🎴 Kartu Petualangan SatwaKu AR</h1>
-      <p>Arahkan kamera aplikasi SatwaKu AR ke kotak marker hitam-putih untuk memunculkan satwa 3D!</p>
+      <p>12 Hewan Terdaftar (Kategori: Peliharaan, Ternak, dan Liar). Arahkan kamera ke marker untuk melihat hewan 3D!</p>
     </div>
     <div style="display: flex; gap: 12px;">
       <button class="btn-action" onclick="window.print()">🖨️ Cetak Kartu (A4)</button>
@@ -213,113 +205,139 @@
     </div>
   </div>
 
+  <!-- KATEGORI A: HEWAN PELIHARAAN -->
+  <div class="category-section-title title-pet">🐱 Kategori A: Hewan Peliharaan (Pets)</div>
   <div class="flashcards-container">
-
-    <!-- Card 1: Gajah -->
+    <!-- Card 1: Kucing -->
     <div class="card">
-      <div class="card-top-tag">🐘 Mamalia Raksasa</div>
+      <div class="card-top-tag">🐱 Peliharaan</div>
       <div class="card-id-badge">ID: 0</div>
-      <h2 class="card-animal-name">Gajah</h2>
-      <div class="card-nickname">Gani si Raksasa Lembut</div>
-      <div class="card-latin-name">Elephas maximus</div>
-      <div class="marker-frame">
-        <img src="assets/markers/hamming/0.png" alt="Marker Barcode 0 - Gajah" />
-      </div>
-      <div class="card-fact">
-        ✨ <b>Kekuatan Super:</b> Belalainya memiliki lebih dari 40.000 otot kuat! Bisa untuk menyedot air minum dan menyapa kawan.
-      </div>
+      <h2 class="card-animal-name">Kucing</h2>
+      <div class="card-nickname">Mimi si Manis Berbulu</div>
+      <div class="card-latin-name">Felis catus</div>
+      <div class="marker-frame"><img src="assets/markers/hamming/0.png" alt="Marker 0 - Kucing" /></div>
+      <div class="card-fact">✨ <b>Keunikan:</b> Kumis kucing sangat peka untuk mengukur celah sempit di tempat gelap dan selalu mendarat mulus!</div>
     </div>
-
-    <!-- Card 2: Badak -->
+    <!-- Card 2: Anjing -->
     <div class="card">
-      <div class="card-top-tag">🦏 Ksatria Bercula</div>
+      <div class="card-top-tag">🐶 Peliharaan</div>
       <div class="card-id-badge">ID: 1</div>
-      <h2 class="card-animal-name">Badak</h2>
-      <div class="card-nickname">Boni si Ksatria Bercula</div>
-      <div class="card-latin-name">Rhinocerotidae</div>
-      <div class="marker-frame">
-        <img src="assets/markers/hamming/1.png" alt="Marker Barcode 1 - Badak" />
-      </div>
-      <div class="card-fact">
-        ✨ <b>Kekuatan Super:</b> Kulitnya sangat tebal seperti baju zirah pelindung dan sangat gemar mandi lumpur sejuk!
-      </div>
+      <h2 class="card-animal-name">Anjing</h2>
+      <div class="card-nickname">Dodi si Penjaga Setia</div>
+      <div class="card-latin-name">Canis lupus familiaris</div>
+      <div class="marker-frame"><img src="assets/markers/hamming/1.png" alt="Marker 1 - Anjing" /></div>
+      <div class="card-fact">✨ <b>Keunikan:</b> Memiliki 300 juta reseptor penciuman di hidungnya dan sangat setia menjaga keluarganya!</div>
     </div>
-
-    <!-- Card 3: Singa -->
+    <!-- Card 3: Kelinci -->
     <div class="card">
-      <div class="card-top-tag">🦁 Raja Savana</div>
+      <div class="card-top-tag">🐰 Peliharaan</div>
       <div class="card-id-badge">ID: 2</div>
+      <h2 class="card-animal-name">Kelinci</h2>
+      <div class="card-nickname">Cici si Telinga Panjang</div>
+      <div class="card-latin-name">Oryctolagus cuniculus</div>
+      <div class="marker-frame"><img src="assets/markers/hamming/2.png" alt="Marker 2 - Kelinci" /></div>
+      <div class="card-fact">✨ <b>Keunikan:</b> Telinga panjangnya bisa berputar hingga 270 derajat untuk mendengarkan suara di sekitarnya!</div>
+    </div>
+  </div>
+
+  <!-- KATEGORI B: HEWAN TERNAK -->
+  <div class="category-section-title title-farm">🐄 Kategori B: Hewan Ternak (Farm Animals)</div>
+  <div class="flashcards-container">
+    <!-- Card 4: Sapi -->
+    <div class="card">
+      <div class="card-top-tag">🐄 Ternak</div>
+      <div class="card-id-badge">ID: 3</div>
+      <h2 class="card-animal-name">Sapi</h2>
+      <div class="card-nickname">Soni si Penghasil Susu</div>
+      <div class="card-latin-name">Bos taurus</div>
+      <div class="marker-frame"><img src="assets/markers/hamming/3.png" alt="Marker 3 - Sapi" /></div>
+      <div class="card-fact">✨ <b>Keunikan:</b> Memiliki lambung bersekat empat ruang untuk mengubah rumput menjadi susu segar penuh gizi kalsium!</div>
+    </div>
+    <!-- Card 5: Ayam -->
+    <div class="card">
+      <div class="card-top-tag">🐔 Ternak</div>
+      <div class="card-id-badge">ID: 4</div>
+      <h2 class="card-animal-name">Ayam</h2>
+      <div class="card-nickname">Koko si Alarm Pagi</div>
+      <div class="card-latin-name">Gallus gallus domesticus</div>
+      <div class="marker-frame"><img src="assets/markers/hamming/4.png" alt="Marker 4 - Ayam" /></div>
+      <div class="card-fact">✨ <b>Keunikan:</b> Memiliki kokok merdu di pagi hari dan matanya bisa melihat spektrum warna ultraviolet!</div>
+    </div>
+    <!-- Card 6: Kambing -->
+    <div class="card">
+      <div class="card-top-tag">🐐 Ternak</div>
+      <div class="card-id-badge">ID: 5</div>
+      <h2 class="card-animal-name">Kambing</h2>
+      <div class="card-nickname">Mbek si Pendaki Lincah</div>
+      <div class="card-latin-name">Capra hircus</div>
+      <div class="marker-frame"><img src="assets/markers/hamming/5.png" alt="Marker 5 - Kambing" /></div>
+      <div class="card-fact">✨ <b>Keunikan:</b> Sangat lincah menaiki lereng batu curam dan pupil matanya persegi panjang memberi pandangan sangat luas!</div>
+    </div>
+    <!-- Card 7: Bebek -->
+    <div class="card">
+      <div class="card-top-tag">🦆 Ternak</div>
+      <div class="card-id-badge">ID: 6</div>
+      <h2 class="card-animal-name">Bebek</h2>
+      <div class="card-nickname">Kuki si Perenang Riang</div>
+      <div class="card-latin-name">Anas platyrhynchos domesticus</div>
+      <div class="marker-frame"><img src="assets/markers/3x3/6.png" alt="Marker 6 - Bebek" /></div>
+      <div class="card-fact">✨ <b>Keunikan:</b> Bulunya dilapisi minyak tahan air sehingga badannya tetap hangat dan kering saat berenang!</div>
+    </div>
+  </div>
+
+  <!-- KATEGORI C: HEWAN LIAR -->
+  <div class="category-section-title title-wild">🦁 Kategori C: Hewan Liar (Wild Animals)</div>
+  <div class="flashcards-container">
+    <!-- Card 8: Gajah -->
+    <div class="card">
+      <div class="card-top-tag">🐘 Liar</div>
+      <div class="card-id-badge">ID: 7</div>
+      <h2 class="card-animal-name">Gajah</h2>
+      <div class="card-nickname">Gani si Raksasa Bijaksana</div>
+      <div class="card-latin-name">Elephas maximus</div>
+      <div class="marker-frame"><img src="assets/markers/3x3/7.png" alt="Marker 7 - Gajah" /></div>
+      <div class="card-fact">✨ <b>Keunikan:</b> Belalainya memiliki lebih dari 40.000 otot kuat dan ingatannya sangat tajam hingga puluhan tahun!</div>
+    </div>
+    <!-- Card 9: Singa -->
+    <div class="card">
+      <div class="card-top-tag">🦁 Liar</div>
+      <div class="card-id-badge">ID: 8</div>
       <h2 class="card-animal-name">Singa</h2>
       <div class="card-nickname">Leo si Raja Savana</div>
       <div class="card-latin-name">Panthera leo</div>
-      <div class="marker-frame">
-        <img src="assets/markers/hamming/2.png" alt="Marker Barcode 2 - Singa" />
-      </div>
-      <div class="card-fact">
-        ✨ <b>Kekuatan Super:</b> Auman menggelegar singa jantan bisa terdengar hingga jarak 8 kilometer jauhnya!
-      </div>
+      <div class="marker-frame"><img src="assets/markers/3x3/8.png" alt="Marker 8 - Singa" /></div>
+      <div class="card-fact">✨ <b>Keunikan:</b> Aumannya bisa terdengar sampai 8 km dan hidup rukun dalam kawanan besar yang disebut 'pride'!</div>
     </div>
-
-    <!-- Card 4: Macan -->
+    <!-- Card 10: Jerapah -->
     <div class="card">
-      <div class="card-top-tag">🐯 Belang Cepat</div>
-      <div class="card-id-badge">ID: 3</div>
-      <h2 class="card-animal-name">Macan</h2>
-      <div class="card-nickname">Timo si Belang Cepat</div>
+      <div class="card-top-tag">🦒 Liar</div>
+      <div class="card-id-badge">ID: 9</div>
+      <h2 class="card-animal-name">Jerapah</h2>
+      <div class="card-nickname">Jojo si Penatap Langit</div>
+      <div class="card-latin-name">Giraffa camelopardalis</div>
+      <div class="marker-frame"><img src="assets/markers/3x3/9.png" alt="Marker 9 - Jerapah" /></div>
+      <div class="card-fact">✨ <b>Keunikan:</b> Hewan tertinggi di bumi (hingga 5.5 meter!) dengan lidah panjang 45 cm yang kebal duri akasia!</div>
+    </div>
+    <!-- Card 11: Harimau -->
+    <div class="card">
+      <div class="card-top-tag">🐯 Liar</div>
+      <div class="card-id-badge">ID: 10</div>
+      <h2 class="card-animal-name">Harimau</h2>
+      <div class="card-nickname">Timo si Belang Penguasa</div>
       <div class="card-latin-name">Panthera tigris</div>
-      <div class="marker-frame">
-        <img src="assets/markers/hamming/3.png" alt="Marker Barcode 3 - Macan" />
-      </div>
-      <div class="card-fact">
-        ✨ <b>Kekuatan Super:</b> Sangat jago berenang di sungai deras dan pandangan malamnya 6 kali lebih tajam dari manusia!
-      </div>
+      <div class="marker-frame"><img src="assets/markers/3x3/10.png" alt="Marker 10 - Harimau" /></div>
+      <div class="card-fact">✨ <b>Keunikan:</b> Kucing liar terbesar yang sangat suka berenang di sungai dan garis belangnya unik di kulitnya!</div>
     </div>
-
-    <!-- Card 5: Zebra -->
+    <!-- Card 12: Monyet -->
     <div class="card">
-      <div class="card-top-tag">🦓 Garis Indah</div>
-      <div class="card-id-badge">ID: 4</div>
-      <h2 class="card-animal-name">Zebra</h2>
-      <div class="card-nickname">Zaki si Juara Garis Indah</div>
-      <div class="card-latin-name">Equus quagga</div>
-      <div class="marker-frame">
-        <img src="assets/markers/hamming/4.png" alt="Marker Barcode 4 - Zebra" />
-      </div>
-      <div class="card-fact">
-        ✨ <b>Kekuatan Super:</b> Belang hitam putihnya membingungkan pemangsa dan melindungi dari gigitan serangga liar!
-      </div>
+      <div class="card-top-tag">🐒 Liar</div>
+      <div class="card-id-badge">ID: 11</div>
+      <h2 class="card-animal-name">Monyet</h2>
+      <div class="card-nickname">Moni si Akrobat Pohon</div>
+      <div class="card-latin-name">Macaca fascicularis</div>
+      <div class="marker-frame"><img src="assets/markers/3x3/11.png" alt="Marker 11 - Monyet" /></div>
+      <div class="card-fact">✨ <b>Keunikan:</b> Ekor dan tangannya sangat lentur untuk bergelantungan di pohon dan pandai memakai batu sebagai alat!</div>
     </div>
-
-    <!-- Card 6: Kapibara -->
-    <div class="card">
-      <div class="card-top-tag">🦦 Paling Santai</div>
-      <div class="card-id-badge">ID: 5</div>
-      <h2 class="card-animal-name">Kapibara</h2>
-      <div class="card-nickname">Capi si Paling Santai</div>
-      <div class="card-latin-name">Hydrochoerus hydrochaeris</div>
-      <div class="marker-frame">
-        <img src="assets/markers/hamming/5.png" alt="Marker Barcode 5 - Kapibara" />
-      </div>
-      <div class="card-fact">
-        ✨ <b>Kekuatan Super:</b> Hewan paling ramah di bumi! Mampu menahan napas menyelam di dalam air selama 5 menit.
-      </div>
-    </div>
-
-    <!-- Bonus Card: Hiro Preset -->
-    <div class="card" style="border-color: #38BDF8;">
-      <div class="card-top-tag" style="background:#E0F2FE; color:#0284C7;">⭐ Uji Coba Cepat</div>
-      <div class="card-id-badge" style="background:#E0F2FE; color:#0284C7;">Preset Hiro</div>
-      <h2 class="card-animal-name">Marker Hiro (Universal)</h2>
-      <div class="card-nickname">Model: Gajah Raksasa</div>
-      <div class="card-latin-name">Preset Standar AR.js</div>
-      <div class="marker-frame" style="border-color:#38BDF8;">
-        <img src="assets/markers/hiro.png" alt="Marker Hiro AR.js" />
-      </div>
-      <div class="card-fact" style="background:#E0F2FE; border-color:#BAE6FD;">
-        💡 <b>Tips:</b> Marker Hiro adalah marker pengujian bawaan AR.js yang langsung aktif tanpa kode khusus.
-      </div>
-    </div>
-
   </div>
 
 </body>
