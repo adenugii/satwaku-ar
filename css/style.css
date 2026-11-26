@@ -650,8 +650,9 @@ video, #col-camera-ar video, video#arjs-video {
   display: flex; flex-direction: column; align-items: center; gap: 4px;
 }
 .marker-thumb-img {
-  width: 90px; height: 90px; background: #FFFFFF; border-radius: 8px; padding: 4px;
+  width: 90px; height: 90px; background: #FFFFFF; border-radius: 8px; padding: 2px;
   border: 1px solid #CBD5E1;
+  object-fit: cover;
 }
 
 /* ==========================================================================

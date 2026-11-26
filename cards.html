@@ -150,23 +150,26 @@
 
     .marker-frame {
       background: #F8FAFC;
-      padding: 12px;
+      padding: 10px;
       border: 2px dashed #CBD5E1;
       border-radius: 18px;
       margin-bottom: 14px;
       display: flex;
       align-items: center;
       justify-content: center;
+      width: 100%;
     }
 
     .marker-frame img {
-      width: 190px;
+      width: 100%;
+      max-width: 200px;
       height: 190px;
-      image-rendering: pixelated;
+      object-fit: cover;
       display: block;
       background: #FFFFFF;
       padding: 4px;
-      border-radius: 8px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
     }
 
     .card-fact {
@@ -196,8 +199,8 @@
 
   <div class="header-bar">
     <div class="header-title">
-      <h1>🎴 Kartu Petualangan SatwaKu AR</h1>
-      <p>12 Hewan Terdaftar (Kategori: Peliharaan, Ternak, dan Liar). Arahkan kamera ke marker untuk melihat hewan 3D!</p>
+      <h1>🎴 Kartu Gambar Edukasi SatwaKu AR</h1>
+      <p>12 Kartu Hewan MindAR Image Tracking. Arahkan kamera ke gambar hewan untuk memunculkan model 3D & dongeng suaranya!</p>
     </div>
     <div style="display: flex; gap: 12px;">
       <button class="btn-action" onclick="window.print()">🖨️ Cetak Kartu (A4)</button>
@@ -211,31 +214,31 @@
     <!-- Card 1: Kucing -->
     <div class="card">
       <div class="card-top-tag">🐱 Peliharaan</div>
-      <div class="card-id-badge">ID: 0</div>
+      <div class="card-id-badge">Target: 0</div>
       <h2 class="card-animal-name">Kucing</h2>
       <div class="card-nickname">Mimi si Manis Berbulu</div>
       <div class="card-latin-name">Felis catus</div>
-      <div class="marker-frame"><img src="assets/markers/3x3/0.png" alt="Marker 0 - Kucing" /></div>
+      <div class="marker-frame"><img src="assets/markers/img/kucing.jpg" alt="Kartu Kucing" /></div>
       <div class="card-fact">✨ <b>Keunikan:</b> Kumis kucing sangat peka untuk mengukur celah sempit di tempat gelap dan selalu mendarat mulus!</div>
     </div>
     <!-- Card 2: Anjing -->
     <div class="card">
       <div class="card-top-tag">🐶 Peliharaan</div>
-      <div class="card-id-badge">ID: 1</div>
+      <div class="card-id-badge">Target: 1</div>
       <h2 class="card-animal-name">Anjing</h2>
       <div class="card-nickname">Dodi si Penjaga Setia</div>
       <div class="card-latin-name">Canis lupus familiaris</div>
-      <div class="marker-frame"><img src="assets/markers/3x3/1.png" alt="Marker 1 - Anjing" /></div>
+      <div class="marker-frame"><img src="assets/markers/img/anjing.jpg" alt="Kartu Anjing" /></div>
       <div class="card-fact">✨ <b>Keunikan:</b> Memiliki 300 juta reseptor penciuman di hidungnya dan sangat setia menjaga keluarganya!</div>
     </div>
     <!-- Card 3: Kelinci -->
     <div class="card">
       <div class="card-top-tag">🐰 Peliharaan</div>
-      <div class="card-id-badge">ID: 2</div>
+      <div class="card-id-badge">Target: 2</div>
       <h2 class="card-animal-name">Kelinci</h2>
       <div class="card-nickname">Cici si Telinga Panjang</div>
       <div class="card-latin-name">Oryctolagus cuniculus</div>
-      <div class="marker-frame"><img src="assets/markers/3x3/2.png" alt="Marker 2 - Kelinci" /></div>
+      <div class="marker-frame"><img src="assets/markers/img/kelinci.jpg" alt="Kartu Kelinci" /></div>
       <div class="card-fact">✨ <b>Keunikan:</b> Telinga panjangnya bisa berputar hingga 270 derajat untuk mendengarkan suara di sekitarnya!</div>
     </div>
   </div>
@@ -246,41 +249,41 @@
     <!-- Card 4: Sapi -->
     <div class="card">
       <div class="card-top-tag">🐄 Ternak</div>
-      <div class="card-id-badge">ID: 3</div>
+      <div class="card-id-badge">Target: 3</div>
       <h2 class="card-animal-name">Sapi</h2>
       <div class="card-nickname">Soni si Penghasil Susu</div>
       <div class="card-latin-name">Bos taurus</div>
-      <div class="marker-frame"><img src="assets/markers/3x3/3.png" alt="Marker 3 - Sapi" /></div>
+      <div class="marker-frame"><img src="assets/markers/img/sapi.jpg" alt="Kartu Sapi" /></div>
       <div class="card-fact">✨ <b>Keunikan:</b> Memiliki lambung bersekat empat ruang untuk mengubah rumput menjadi susu segar penuh gizi kalsium!</div>
     </div>
     <!-- Card 5: Ayam -->
     <div class="card">
       <div class="card-top-tag">🐔 Ternak</div>
-      <div class="card-id-badge">ID: 4</div>
+      <div class="card-id-badge">Target: 4</div>
       <h2 class="card-animal-name">Ayam</h2>
       <div class="card-nickname">Koko si Alarm Pagi</div>
       <div class="card-latin-name">Gallus gallus domesticus</div>
-      <div class="marker-frame"><img src="assets/markers/3x3/4.png" alt="Marker 4 - Ayam" /></div>
+      <div class="marker-frame"><img src="assets/markers/img/ayam.jpg" alt="Kartu Ayam" /></div>
       <div class="card-fact">✨ <b>Keunikan:</b> Memiliki kokok merdu di pagi hari dan matanya bisa melihat spektrum warna ultraviolet!</div>
     </div>
     <!-- Card 6: Kambing -->
     <div class="card">
       <div class="card-top-tag">🐐 Ternak</div>
-      <div class="card-id-badge">ID: 5</div>
+      <div class="card-id-badge">Target: 5</div>
       <h2 class="card-animal-name">Kambing</h2>
       <div class="card-nickname">Mbek si Pendaki Lincah</div>
       <div class="card-latin-name">Capra hircus</div>
-      <div class="marker-frame"><img src="assets/markers/3x3/5.png" alt="Marker 5 - Kambing" /></div>
+      <div class="marker-frame"><img src="assets/markers/img/kambing.jpg" alt="Kartu Kambing" /></div>
       <div class="card-fact">✨ <b>Keunikan:</b> Sangat lincah menaiki lereng batu curam dan pupil matanya persegi panjang memberi pandangan sangat luas!</div>
     </div>
     <!-- Card 7: Bebek -->
     <div class="card">
       <div class="card-top-tag">🦆 Ternak</div>
-      <div class="card-id-badge">ID: 6</div>
+      <div class="card-id-badge">Target: 6</div>
       <h2 class="card-animal-name">Bebek</h2>
       <div class="card-nickname">Kuki si Perenang Riang</div>
       <div class="card-latin-name">Anas platyrhynchos domesticus</div>
-      <div class="marker-frame"><img src="assets/markers/3x3/6.png" alt="Marker 6 - Bebek" /></div>
+      <div class="marker-frame"><img src="assets/markers/img/bebek.jpg" alt="Kartu Bebek" /></div>
       <div class="card-fact">✨ <b>Keunikan:</b> Bulunya dilapisi minyak tahan air sehingga badannya tetap hangat dan kering saat berenang!</div>
     </div>
   </div>
@@ -291,51 +294,51 @@
     <!-- Card 8: Gajah -->
     <div class="card">
       <div class="card-top-tag">🐘 Liar</div>
-      <div class="card-id-badge">ID: 7</div>
+      <div class="card-id-badge">Target: 7</div>
       <h2 class="card-animal-name">Gajah</h2>
       <div class="card-nickname">Gani si Raksasa Bijaksana</div>
       <div class="card-latin-name">Elephas maximus</div>
-      <div class="marker-frame"><img src="assets/markers/3x3/7.png" alt="Marker 7 - Gajah" /></div>
+      <div class="marker-frame"><img src="assets/markers/img/gajah.jpg" alt="Kartu Gajah" /></div>
       <div class="card-fact">✨ <b>Keunikan:</b> Belalainya memiliki lebih dari 40.000 otot kuat dan ingatannya sangat tajam hingga puluhan tahun!</div>
     </div>
     <!-- Card 9: Singa -->
     <div class="card">
       <div class="card-top-tag">🦁 Liar</div>
-      <div class="card-id-badge">ID: 8</div>
+      <div class="card-id-badge">Target: 8</div>
       <h2 class="card-animal-name">Singa</h2>
       <div class="card-nickname">Leo si Raja Savana</div>
       <div class="card-latin-name">Panthera leo</div>
-      <div class="marker-frame"><img src="assets/markers/3x3/8.png" alt="Marker 8 - Singa" /></div>
+      <div class="marker-frame"><img src="assets/markers/img/singa.jpg" alt="Kartu Singa" /></div>
       <div class="card-fact">✨ <b>Keunikan:</b> Aumannya bisa terdengar sampai 8 km dan hidup rukun dalam kawanan besar yang disebut 'pride'!</div>
     </div>
     <!-- Card 10: Jerapah -->
     <div class="card">
       <div class="card-top-tag">🦒 Liar</div>
-      <div class="card-id-badge">ID: 9</div>
+      <div class="card-id-badge">Target: 9</div>
       <h2 class="card-animal-name">Jerapah</h2>
       <div class="card-nickname">Jojo si Penatap Langit</div>
       <div class="card-latin-name">Giraffa camelopardalis</div>
-      <div class="marker-frame"><img src="assets/markers/3x3/9.png" alt="Marker 9 - Jerapah" /></div>
+      <div class="marker-frame"><img src="assets/markers/img/jerapah.jpg" alt="Kartu Jerapah" /></div>
       <div class="card-fact">✨ <b>Keunikan:</b> Hewan tertinggi di bumi (hingga 5.5 meter!) dengan lidah panjang 45 cm yang kebal duri akasia!</div>
     </div>
     <!-- Card 11: Harimau -->
     <div class="card">
       <div class="card-top-tag">🐯 Liar</div>
-      <div class="card-id-badge">ID: 10</div>
+      <div class="card-id-badge">Target: 10</div>
       <h2 class="card-animal-name">Harimau</h2>
       <div class="card-nickname">Timo si Belang Penguasa</div>
       <div class="card-latin-name">Panthera tigris</div>
-      <div class="marker-frame"><img src="assets/markers/3x3/10.png" alt="Marker 10 - Harimau" /></div>
+      <div class="marker-frame"><img src="assets/markers/img/harimau.png" alt="Kartu Harimau" /></div>
       <div class="card-fact">✨ <b>Keunikan:</b> Kucing liar terbesar yang sangat suka berenang di sungai dan garis belangnya unik di kulitnya!</div>
     </div>
     <!-- Card 12: Monyet -->
     <div class="card">
       <div class="card-top-tag">🐒 Liar</div>
-      <div class="card-id-badge">ID: 11</div>
+      <div class="card-id-badge">Target: 11</div>
       <h2 class="card-animal-name">Monyet</h2>
       <div class="card-nickname">Moni si Akrobat Pohon</div>
       <div class="card-latin-name">Macaca fascicularis</div>
-      <div class="marker-frame"><img src="assets/markers/3x3/11.png" alt="Marker 11 - Monyet" /></div>
+      <div class="marker-frame"><img src="assets/markers/img/monkey.jpg" alt="Kartu Monyet" /></div>
       <div class="card-fact">✨ <b>Keunikan:</b> Ekor dan tangannya sangat lentur untuk bergelantungan di pohon dan pandai memakai batu sebagai alat!</div>
     </div>
   </div>
