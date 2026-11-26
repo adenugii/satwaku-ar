@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>SatwaKu AR - MindAR Offline Compiler Local</title>
+  <!-- A-Frame & MindAR Bundle yang sudah memiliki Compiler lengkap -->
+  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+  <script src="js/mindar-image-aframe.prod.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #0f172a;
+      color: #f8fafc;
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .card {
+      background: #1e293b;
+      padding: 24px;
+      border-radius: 12px;
+      max-width: 650px;
+      width: 100%;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    }
+    h1 {
+      margin-top: 0;
+      font-size: 20px;
+      color: #38bdf8;
+    }
+    p {
+      color: #94a3b8;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .btn {
+      background: #0284c7;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 15px;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.2s;
+    }
+    .btn:hover {
+      background: #0369a1;
+    }
+    .btn:disabled {
+      background: #475569;
+      cursor: not-allowed;
+    }
+    #progress-container {
+      margin-top: 20px;
+      display: none;
+    }
+    .progress-bar-bg {
+      background: #334155;
+      height: 12px;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    #progress-fill {
+      background: #38bdf8;
+      height: 100%;
+      width: 0%;
+      transition: width 0.3s;
+    }
+    #log {
+      margin-top: 15px;
+      background: #0f172a;
+      padding: 12px;
+      border-radius: 6px;
+      font-family: monospace;
+      font-size: 12px;
+      color: #cbd5e1;
+      height: 180px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+    }
+    .file-list {
+      margin: 15px 0;
+      font-size: 13px;
+      color: #cbd5e1;
+      background: #0f172a;
+      padding: 10px;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <h1>🦁 MindAR Target Generator — SatwaKu AR</h1>
+  <p>Halaman ini memproses 12 gambar satwa secara otomatis di browser menggunakan WebGL & WebAssembly Compiler bawaan MindAR untuk menghasilkan file <b>targets.mind</b>.</p>
+
+  <div class="file-list">
+    <b>Daftar 12 Marker Target (Sesuai Urutan Index satwaData):</b>
+    <ol style="margin: 8px 0 0 18px; padding: 0;">
+      <li>assets/markers/img/kucing.jpg (Index 0 - animal_01)</li>
+      <li>assets/markers/img/anjing.jpg (Index 1 - animal_02)</li>
+      <li>assets/markers/img/kelinci.jpg (Index 2 - animal_03)</li>
+      <li>assets/markers/img/sapi.jpg (Index 3 - animal_04)</li>
+      <li>assets/markers/img/ayam.jpg (Index 4 - animal_05)</li>
+      <li>assets/markers/img/kambing.jpg (Index 5 - animal_06)</li>
+      <li>assets/markers/img/bebek.jpg (Index 6 - animal_07)</li>
+      <li>assets/markers/img/gajah.jpg (Index 7 - animal_08)</li>
+      <li>assets/markers/img/singa.jpg (Index 8 - animal_09)</li>
+      <li>assets/markers/img/jerapah.jpg (Index 9 - animal_10)</li>
+      <li>assets/markers/img/harimau.png (Index 10 - animal_11)</li>
+      <li>assets/markers/img/monkey.jpg (Index 11 - animal_12)</li>
+    </ol>
+  </div>
+
+  <button id="start-btn" class="btn" onclick="startCompilation()">
+    ⚡ Mulai Kompilasi targets.mind
+  </button>
+
+  <div id="progress-container">
+    <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px;">
+      <span id="status-text">Memproses...</span>
+      <span id="progress-percent">0%</span>
+    </div>
+    <div class="progress-bar-bg">
+      <div id="progress-fill"></div>
+    </div>
+  </div>
+
+  <div id="log">Siap melakukan kompilasi.</div>
+</div>
+
+<script>
+const imageList = [
+  "assets/markers/img/kucing.jpg",
+  "assets/markers/img/anjing.jpg",
+  "assets/markers/img/kelinci.jpg",
+  "assets/markers/img/sapi.jpg",
+  "assets/markers/img/ayam.jpg",
+  "assets/markers/img/kambing.jpg",
+  "assets/markers/img/bebek.jpg",
+  "assets/markers/img/gajah.jpg",
+  "assets/markers/img/singa.jpg",
+  "assets/markers/img/jerapah.jpg",
+  "assets/markers/img/harimau.png",
+  "assets/markers/img/monkey.jpg"
+];
+
+function log(msg) {
+  const logEl = document.getElementById("log");
+  logEl.textContent += "\\n" + msg;
+  logEl.scrollTop = logEl.scrollHeight;
+}
+
+function loadImage(src, maxDim = 800) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onload = () => {
+      // Resize gambar beresolusi raksasa agar compiler ringan & kilat
+      let w = img.width;
+      let h = img.height;
+      if (w > maxDim || h > maxDim) {
+        if (w > h) {
+          h = Math.round((h * maxDim) / w);
+          w = maxDim;
+        } else {
+          w = Math.round((w * maxDim) / h);
+          h = maxDim;
+        }
+        const canvas = document.createElement("canvas");
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, w, h);
+        const resizedImg = new Image();
+        resizedImg.onload = () => resolve(resizedImg);
+        resizedImg.src = canvas.toDataURL("image/jpeg", 0.9);
+      } else {
+        resolve(img);
+      }
+    };
+    img.onerror = (e) => reject(new Error("Gagal load gambar: " + src));
+    img.src = src;
+  });
+}
+
+async function startCompilation() {
+  const btn = document.getElementById("start-btn");
+  btn.disabled = true;
+  document.getElementById("progress-container").style.display = "block";
+  const fill = document.getElementById("progress-fill");
+  const percentText = document.getElementById("progress-percent");
+  const statusText = document.getElementById("status-text");
+
+  log("Mulai memuat 12 gambar target...");
+
+  try {
+    const loadedImages = [];
+    for (let i = 0; i < imageList.length; i++) {
+      const src = imageList[i];
+      statusText.textContent = `Memuat gambar ${i + 1} dari 12 (${src})...`;
+      log(`Memuat: ${src}`);
+      const img = await loadImage(src);
+      loadedImages.push(img);
+    }
+
+    log("Semua gambar berhasil dimuat ke memori. Menginisialisasi MindAR Offline Compiler...");
+    statusText.textContent = "Menginisialisasi MindAR Compiler...";
+
+    const CompilerClass = (window.MINDAR && window.MINDAR.IMAGE && window.MINDAR.IMAGE.Compiler) 
+      || window.Compiler;
+
+    if (!CompilerClass) {
+      throw new Error("Library MindAR Compiler tidak ditemukan pada window object.");
+    }
+
+    const compiler = new CompilerClass();
+
+    const dataList = await compiler.compileImageTargets(loadedImages, (progress) => {
+      const p = Math.round(progress);
+      fill.style.width = p + "%";
+      percentText.textContent = p + "%";
+      statusText.textContent = `Mengekstrak Feature Tracking: ${p}%`;
+    });
+
+    log("Feature tracking selesai diekstrak!");
+    statusText.textContent = "Mengekspor buffer targets.mind...";
+
+    const exportedBuffer = await compiler.exportData();
+    window._exportedBufferBase64 = btoa(
+      new Uint8Array(exportedBuffer).reduce((data, byte) => data + String.fromCharCode(byte), '')
+    );
+    window._compilationDone = true;
+
+    const blob = new Blob([exportedBuffer], { type: 'application/octet-stream' });
+    
+    // Download otomatis
+    const downloadUrl = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = downloadUrl;
+    a.download = "targets.mind";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+
+    log("SUKSES! File 'targets.mind' telah dibuat dan di-download otomatis.");
+    log("👉 Pindahkan file targets.mind tersebut ke dalam folder: assets/markers/targets.mind");
+    statusText.textContent = "Selesai! Silakan cek folder Download browser Anda.";
+    fill.style.width = "100%";
+    percentText.textContent = "100%";
+  } catch (err) {
+    console.error(err);
+    log("ERROR: " + err.message);
+    statusText.textContent = "Terjadi kegagalan!";
+  } finally {
+    btn.disabled = false;
+  }
+}
+</script>
+
+</body>
+</html>

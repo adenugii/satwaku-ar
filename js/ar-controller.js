@@ -283,6 +283,7 @@ async function startAR() {
 
     setTimeout(() => {
       selectAnimal(ARState.activeAnimalId || "animal_01", false);
+      window.dispatchEvent(new Event("resize"));
     }, 200);
 
     const scene = container.querySelector("a-scene");
@@ -290,6 +291,11 @@ async function startAR() {
       const onLoaded = () => {
         registerMarkerEvents();
         fixCameraVideoElements();
+        // Jalankan mindar tracking engine
+        const arSystem = scene.systems["mindar-image-system"];
+        if (arSystem && !arSystem.started) {
+          arSystem.start();
+        }
       };
       scene.hasLoaded ? onLoaded() : scene.addEventListener("loaded", onLoaded);
     }
@@ -322,6 +328,19 @@ function endSession() {
   soundMgr.stopNarrationAudio();
   ARState.isScanning = false;
 
+  const container = document.getElementById("ar-scene-container");
+  if (container) {
+    const scene = container.querySelector("a-scene");
+    if (scene && scene.systems && scene.systems["mindar-image-system"]) {
+      try {
+        scene.systems["mindar-image-system"].stop();
+      } catch (e) {
+        console.warn("Error stopping MindAR:", e);
+      }
+    }
+    container.innerHTML = "";
+  }
+
   document.querySelectorAll("video").forEach(v => {
     if (v.srcObject) {
       v.srcObject.getTracks().forEach(t => t.stop());
@@ -330,33 +349,37 @@ function endSession() {
     v.remove();
   });
 
-  const container = document.getElementById("ar-scene-container");
-  if (container) container.innerHTML = "";
-
   document.getElementById("ar-screen").classList.add("hidden");
   document.getElementById("landing-screen").classList.remove("hidden");
 }
 
-// ── Pendaftaran Event Marker AR ──────────────────────────────────────────
+// ── Pendaftaran Event Target MindAR / Marker ──────────────────────────
 function registerMarkerEvents() {
   const container = document.getElementById("ar-scene-container");
   if (!container) return;
 
-  container.querySelectorAll("a-marker").forEach(marker => {
-    const animalId = marker.getAttribute("data-satwa-id");
+  const targets = container.querySelectorAll("[mindar-image-target], a-marker");
+  targets.forEach(target => {
+    const animalId = target.getAttribute("data-satwa-id");
     if (!animalId) return;
 
-    marker.addEventListener("markerFound", () => {
+    // Support event targetFound (MindAR) dan markerFound (Fallback)
+    const onFound = () => {
       updateScanStatus(`✨ Kartu ${satwaData[animalId]?.name || "Satwa"} Terdeteksi!`, "🎉");
       selectAnimal(animalId, true);
-    });
+    };
 
-    marker.addEventListener("markerLost", () => {
+    const onLost = () => {
       updateScanStatus("Arahkan kamera ke kartu satwa...", "🔍");
       soundMgr.stopNarrationAudio();
       resetAudioNarrationButton();
       ARState.isSpeaking = false;
-    });
+    };
+
+    target.addEventListener("targetFound", onFound);
+    target.addEventListener("markerFound", onFound);
+    target.addEventListener("targetLost", onLost);
+    target.addEventListener("markerLost", onLost);
   });
 }
 
@@ -423,8 +446,8 @@ function initPreview3D() {
   if (!canvas || ARState.previewRenderer || typeof THREE === "undefined") return;
 
   const wrapper = document.getElementById("preview-canvas-wrapper");
-  const width = wrapper ? wrapper.clientWidth : 300;
-  const height = wrapper ? wrapper.clientHeight : 220;
+  const width = (wrapper && wrapper.clientWidth > 0) ? wrapper.clientWidth : 300;
+  const height = (wrapper && wrapper.clientHeight > 0) ? wrapper.clientHeight : 220;
 
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
@@ -458,14 +481,26 @@ function initPreview3D() {
 
   attachPreviewInteraction();
 
-  window.addEventListener("resize", () => {
+  const resizeHandler = () => {
     if (!ARState.previewRenderer || !wrapper) return;
     const w = wrapper.clientWidth;
     const h = wrapper.clientHeight;
-    camera.aspect = w / h;
-    camera.updateProjectionMatrix();
-    renderer.setSize(w, h, false);
-  });
+    if (w > 0 && h > 0) {
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      renderer.setSize(w, h, false);
+    }
+  };
+
+  window.addEventListener("resize", resizeHandler);
+
+  // ResizeObserver untuk mendeteksi perubahan ukuran wrapper (misalnya saat tab / layar beralih dari hidden ke visible)
+  if (window.ResizeObserver && wrapper) {
+    const ro = new ResizeObserver(() => {
+      resizeHandler();
+    });
+    ro.observe(wrapper);
+  }
 }
 
 function updatePreviewModel(modelSrc) {
@@ -478,7 +513,15 @@ function updatePreviewModel(modelSrc) {
     ARState.previewModel = null;
   }
 
-  const loader = new THREE.GLTFLoader();
+  const LoaderClass = (typeof THREE !== "undefined" && THREE.GLTFLoader) 
+    || (typeof AFRAME !== "undefined" && AFRAME.THREE && AFRAME.THREE.GLTFLoader);
+
+  if (!LoaderClass) {
+    console.warn("GLTFLoader belum tersedia di THREE/AFRAME.THREE");
+    return;
+  }
+
+  const loader = new LoaderClass();
   loader.load(
     modelSrc,
     gltf => {

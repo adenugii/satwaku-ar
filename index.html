@@ -8,9 +8,9 @@
   
   <link rel="stylesheet" href="css/style.css" />
   
-  <!-- A-Frame & AR.js -->
+  <!-- A-Frame & MindAR Image Tracking -->
   <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
-  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+  <script src="js/mindar-image-aframe.prod.js"></script>
   
   <!-- App Data, Sound Manager, & Controller -->
   <script src="js/satwa-data.js"></script>
@@ -274,11 +274,11 @@
     </div>
     <div class="modal-body">
       <p style="font-size:0.9rem; color:#475569;">
-        Arahkan kamera ke kartu barcode berikut untuk memunculkan hewan 3D:
+        Arahkan kamera ke gambar hewan di bawah ini untuk memunculkan satwa 3D & dongeng suaranya:
       </p>
       <div style="margin: 12px 0;">
         <a href="cards.html" target="_blank" class="btn btn-primary" style="font-size:0.9rem; text-decoration:none;">
-          🖨️ Buka Kartu Siap Cetak (A4)
+          🖨️ Buka & Cetak Kartu Gambar Satwa (A4)
         </a>
       </div>
       
@@ -287,18 +287,18 @@
       <div class="modal-cards-grid">
         <div class="marker-thumb-card">
           <b>1. Kucing</b>
-          <img class="marker-thumb-img" src="assets/markers/3x3/0.png" alt="Marker 0" />
-          <span>Barcode ID: 0</span>
+          <img class="marker-thumb-img" src="assets/markers/img/kucing.jpg" alt="Kartu Kucing" />
+          <span>Target Index: 0</span>
         </div>
         <div class="marker-thumb-card">
           <b>2. Anjing</b>
-          <img class="marker-thumb-img" src="assets/markers/3x3/1.png" alt="Marker 1" />
-          <span>Barcode ID: 1</span>
+          <img class="marker-thumb-img" src="assets/markers/img/anjing.jpg" alt="Kartu Anjing" />
+          <span>Target Index: 1</span>
         </div>
         <div class="marker-thumb-card">
           <b>3. Kelinci</b>
-          <img class="marker-thumb-img" src="assets/markers/3x3/2.png" alt="Marker 2" />
-          <span>Barcode ID: 2</span>
+          <img class="marker-thumb-img" src="assets/markers/img/kelinci.jpg" alt="Kartu Kelinci" />
+          <span>Target Index: 2</span>
         </div>
       </div>
 
@@ -307,23 +307,23 @@
       <div class="modal-cards-grid">
         <div class="marker-thumb-card">
           <b>4. Sapi</b>
-          <img class="marker-thumb-img" src="assets/markers/3x3/3.png" alt="Marker 3" />
-          <span>Barcode ID: 3</span>
+          <img class="marker-thumb-img" src="assets/markers/img/sapi.jpg" alt="Kartu Sapi" />
+          <span>Target Index: 3</span>
         </div>
         <div class="marker-thumb-card">
           <b>5. Ayam</b>
-          <img class="marker-thumb-img" src="assets/markers/3x3/4.png" alt="Marker 4" />
-          <span>Barcode ID: 4</span>
+          <img class="marker-thumb-img" src="assets/markers/img/ayam.jpg" alt="Kartu Ayam" />
+          <span>Target Index: 4</span>
         </div>
         <div class="marker-thumb-card">
           <b>6. Kambing</b>
-          <img class="marker-thumb-img" src="assets/markers/3x3/5.png" alt="Marker 5" />
-          <span>Barcode ID: 5</span>
+          <img class="marker-thumb-img" src="assets/markers/img/kambing.jpg" alt="Kartu Kambing" />
+          <span>Target Index: 5</span>
         </div>
         <div class="marker-thumb-card">
           <b>7. Bebek</b>
-          <img class="marker-thumb-img" src="assets/markers/3x3/6.png" alt="Marker 6" />
-          <span>Barcode ID: 6</span>
+          <img class="marker-thumb-img" src="assets/markers/img/bebek.jpg" alt="Kartu Bebek" />
+          <span>Target Index: 6</span>
         </div>
       </div>
 
@@ -332,28 +332,28 @@
       <div class="modal-cards-grid">
         <div class="marker-thumb-card">
           <b>8. Gajah</b>
-          <img class="marker-thumb-img" src="assets/markers/3x3/7.png" alt="Marker 7" />
-          <span>Barcode ID: 7</span>
+          <img class="marker-thumb-img" src="assets/markers/img/gajah.jpg" alt="Kartu Gajah" />
+          <span>Target Index: 7</span>
         </div>
         <div class="marker-thumb-card">
           <b>9. Singa</b>
-          <img class="marker-thumb-img" src="assets/markers/3x3/8.png" alt="Marker 8" />
-          <span>Barcode ID: 8</span>
+          <img class="marker-thumb-img" src="assets/markers/img/singa.jpg" alt="Kartu Singa" />
+          <span>Target Index: 8</span>
         </div>
         <div class="marker-thumb-card">
           <b>10. Jerapah</b>
-          <img class="marker-thumb-img" src="assets/markers/3x3/9.png" alt="Marker 9" />
-          <span>Barcode ID: 9</span>
+          <img class="marker-thumb-img" src="assets/markers/img/jerapah.jpg" alt="Kartu Jerapah" />
+          <span>Target Index: 9</span>
         </div>
         <div class="marker-thumb-card">
           <b>11. Harimau</b>
-          <img class="marker-thumb-img" src="assets/markers/3x3/10.png" alt="Marker 10" />
-          <span>Barcode ID: 10</span>
+          <img class="marker-thumb-img" src="assets/markers/img/harimau.png" alt="Kartu Harimau" />
+          <span>Target Index: 10</span>
         </div>
         <div class="marker-thumb-card">
           <b>12. Monyet</b>
-          <img class="marker-thumb-img" src="assets/markers/3x3/11.png" alt="Marker 11" />
-          <span>Barcode ID: 11</span>
+          <img class="marker-thumb-img" src="assets/markers/img/monkey.jpg" alt="Kartu Monyet" />
+          <span>Target Index: 11</span>
         </div>
       </div>
 
@@ -369,10 +369,11 @@
   <a-scene
     embedded
     vr-mode-ui="enabled: false"
+    device-orientation-permission-ui="enabled: false"
     renderer="colorManagement: true; antialias: true; alpha: true; precision: medium;"
-    arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;"
+    mindar-image="imageTargetSrc: assets/markers/targets.mind; autoStart: false; uiLoading: no; uiScanning: no; uiError: no; filterMinCF: 0.0001; filterBeta: 0.001;"
   >
-    <a-entity light="type: ambient; color: #ffffff; intensity: 0.65"></a-entity>
+    <a-entity light="type: ambient; color: #ffffff; intensity: 0.8"></a-entity>
     <a-entity light="type: directional; color: #fffdf5; intensity: 1.5; position: 2 5 3"></a-entity>
     <a-entity light="type: directional; color: #e0f2fe; intensity: 0.8; position: -3 3 -1"></a-entity>
 
@@ -396,62 +397,57 @@
       <a-asset-item id="model-monyet"   src="assets/models/poly/monkey.glb"></a-asset-item>
     </a-assets>
 
-    <!-- Markers Barcode (0–11) - Skala ideal disesuaikan agar proporsional dan jelas terlihat di atas kartu -->
+    <!-- MindAR Image Targets (0–11) -->
     <!-- 0: Kucing -->
-    <a-marker type="barcode" value="0"  id="marker-0"  data-satwa-id="animal_01" smooth="true" smoothCount="5">
+    <a-entity mindar-image-target="targetIndex: 0" id="target-0" data-satwa-id="animal_01">
       <a-entity gltf-model="#model-kucing"  position="0 0 0" scale="0.050 0.050 0.050" animation="property:rotation;to:0 360 0;loop:true;dur:18000;easing:linear"></a-entity>
-    </a-marker>
+    </a-entity>
     <!-- 1: Anjing -->
-    <a-marker type="barcode" value="1"  id="marker-1"  data-satwa-id="animal_02" smooth="true" smoothCount="5">
+    <a-entity mindar-image-target="targetIndex: 1" id="target-1" data-satwa-id="animal_02">
       <a-entity gltf-model="#model-anjing"  position="0 0 0" scale="0.0065 0.0065 0.0065" animation="property:rotation;to:0 360 0;loop:true;dur:18000;easing:linear"></a-entity>
-    </a-marker>
+    </a-entity>
     <!-- 2: Kelinci -->
-    <a-marker type="barcode" value="2"  id="marker-2"  data-satwa-id="animal_03" smooth="true" smoothCount="5">
+    <a-entity mindar-image-target="targetIndex: 2" id="target-2" data-satwa-id="animal_03">
       <a-entity gltf-model="#model-kelinci" position="0 0 0" scale="0.016 0.016 0.016" animation="property:rotation;to:0 360 0;loop:true;dur:18000;easing:linear"></a-entity>
-    </a-marker>
+    </a-entity>
     <!-- 3: Sapi -->
-    <a-marker type="barcode" value="3"  id="marker-3"  data-satwa-id="animal_04" smooth="true" smoothCount="5">
+    <a-entity mindar-image-target="targetIndex: 3" id="target-3" data-satwa-id="animal_04">
       <a-entity gltf-model="#model-sapi"    position="0 0 0" scale="0.30 0.30 0.30" animation="property:rotation;to:0 360 0;loop:true;dur:18000;easing:linear"></a-entity>
-    </a-marker>
+    </a-entity>
     <!-- 4: Ayam -->
-    <a-marker type="barcode" value="4"  id="marker-4"  data-satwa-id="animal_05" smooth="true" smoothCount="5">
+    <a-entity mindar-image-target="targetIndex: 4" id="target-4" data-satwa-id="animal_05">
       <a-entity gltf-model="#model-ayam"    position="0 0 0" scale="0.024 0.024 0.024" animation="property:rotation;to:0 360 0;loop:true;dur:18000;easing:linear"></a-entity>
-    </a-marker>
+    </a-entity>
     <!-- 5: Kambing -->
-    <a-marker type="barcode" value="5"  id="marker-5"  data-satwa-id="animal_06" smooth="true" smoothCount="5">
+    <a-entity mindar-image-target="targetIndex: 5" id="target-5" data-satwa-id="animal_06">
       <a-entity gltf-model="#model-kambing" position="0 0 0" scale="0.55 0.55 0.55" animation="property:rotation;to:0 360 0;loop:true;dur:18000;easing:linear"></a-entity>
-    </a-marker>
+    </a-entity>
     <!-- 6: Bebek -->
-    <a-marker type="barcode" value="6"  id="marker-6"  data-satwa-id="animal_07" smooth="true" smoothCount="5">
+    <a-entity mindar-image-target="targetIndex: 6" id="target-6" data-satwa-id="animal_07">
       <a-entity gltf-model="#model-bebek"   position="0 0 0" scale="1.00 1.00 1.00" animation="property:rotation;to:0 360 0;loop:true;dur:18000;easing:linear"></a-entity>
-    </a-marker>
+    </a-entity>
     <!-- 7: Gajah -->
-    <a-marker type="barcode" value="7"  id="marker-7"  data-satwa-id="animal_08" smooth="true" smoothCount="5">
+    <a-entity mindar-image-target="targetIndex: 7" id="target-7" data-satwa-id="animal_08">
       <a-entity gltf-model="#model-gajah"   position="0 0 0" scale="0.36 0.36 0.36" animation="property:rotation;to:0 360 0;loop:true;dur:18000;easing:linear"></a-entity>
-    </a-marker>
+    </a-entity>
     <!-- 8: Singa -->
-    <a-marker type="barcode" value="8"  id="marker-8"  data-satwa-id="animal_09" smooth="true" smoothCount="5">
+    <a-entity mindar-image-target="targetIndex: 8" id="target-8" data-satwa-id="animal_09">
       <a-entity gltf-model="#model-singa"   position="0 0 0" scale="0.29 0.29 0.29" animation="property:rotation;to:0 360 0;loop:true;dur:18000;easing:linear"></a-entity>
-    </a-marker>
+    </a-entity>
     <!-- 9: Jerapah -->
-    <a-marker type="barcode" value="9"  id="marker-9"  data-satwa-id="animal_10" smooth="true" smoothCount="5">
+    <a-entity mindar-image-target="targetIndex: 9" id="target-9" data-satwa-id="animal_10">
       <a-entity gltf-model="#model-jerapah" position="0 0 0" scale="0.012 0.012 0.012" animation="property:rotation;to:0 360 0;loop:true;dur:18000;easing:linear"></a-entity>
-    </a-marker>
+    </a-entity>
     <!-- 10: Harimau -->
-    <a-marker type="barcode" value="10" id="marker-10" data-satwa-id="animal_11" smooth="true" smoothCount="5">
+    <a-entity mindar-image-target="targetIndex: 10" id="target-10" data-satwa-id="animal_11">
       <a-entity gltf-model="#model-harimau" position="0 0 0" scale="0.018 0.018 0.018" animation="property:rotation;to:0 360 0;loop:true;dur:18000;easing:linear"></a-entity>
-    </a-marker>
+    </a-entity>
     <!-- 11: Monyet -->
-    <a-marker type="barcode" value="11" id="marker-11" data-satwa-id="animal_12" smooth="true" smoothCount="5">
+    <a-entity mindar-image-target="targetIndex: 11" id="target-11" data-satwa-id="animal_12">
       <a-entity gltf-model="#model-monyet"  position="0 0 0" scale="0.50 0.50 0.50" animation="property:rotation;to:0 360 0;loop:true;dur:18000;easing:linear"></a-entity>
-    </a-marker>
+    </a-entity>
 
-    <!-- Marker Hiro Fallback -->
-    <a-marker preset="hiro" id="marker-hiro" data-satwa-id="animal_01" smooth="true">
-      <a-entity gltf-model="#model-kucing" position="0 0 0" scale="0.050 0.050 0.050" animation="property:rotation;to:0 360 0;loop:true;dur:18000;easing:linear"></a-entity>
-    </a-marker>
-
-    <a-entity camera></a-entity>
+    <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
   </a-scene>
 </template>
 
